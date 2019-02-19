@@ -9,6 +9,7 @@ z2
 cModel Technology
 dC:/Comp_Arch_Org_Project
 valu
+<<<<<<< HEAD
 Z0 !s110 1550546784
 !i10b 1
 !s100 ZiLzW2QU3U415V1hR<bh^0
@@ -18,24 +19,55 @@ Z2 dH:/ComputerArch/Comp-Arch-Org-Project
 Z3 w1550546601
 8H:/ComputerArch/Comp-Arch-Org-Project/alu.v
 FH:/ComputerArch/Comp-Arch-Org-Project/alu.v
+=======
+!s110 1550546707
+!i10b 1
+!s100 W0L>RIQWAR4jllG6FV6gf1
+ISeGSX2NEc20M3>@8Z;03:1
+Z0 VDg1SIo80bB@j0V0VzS_@n1
+Z1 dC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project
+Z2 w1550068928
+8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/alu.v
+FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/alu.v
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 L0 6
 Z4 OP;L;10.7b;67
 r1
 !s85 0
 31
+<<<<<<< HEAD
 Z5 !s108 1550546784.000000
 !s107 H:/ComputerArch/Comp-Arch-Org-Project/alu.v|
 !s90 -reportprogress|300|-work|work|H:/ComputerArch/Comp-Arch-Org-Project/alu.v|
+=======
+!s108 1550546707.000000
+!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/alu.v|
+!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/alu.v|
+!s101 -O0
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 !i113 1
 Z6 o-work work
 Z7 tCvgOpt 0
 vmux32
+<<<<<<< HEAD
 Z8 !s110 1550546785
 !i10b 1
 !s100 J7VXJLC31:N<5Km6Cf5]f0
 Ih28E0I3i>I]cfQlaOE@Rz2
 R1
 R2
+=======
+Z5 !s110 1550546708
+!i10b 1
+!s100 Acz_fIGhQd8CLP=K1MHX>1
+IF`jZnAV:CoL=Q=Ze<7hcI0
+R0
+R1
+R2
+8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux32.v
+FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux32.v
+L0 6
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 R3
 8H:/ComputerArch/Comp-Arch-Org-Project/mux32.v
 FH:/ComputerArch/Comp-Arch-Org-Project/mux32.v
@@ -44,19 +76,39 @@ R4
 r1
 !s85 0
 31
+<<<<<<< HEAD
 R5
 !s107 H:/ComputerArch/Comp-Arch-Org-Project/mux32.v|
 !s90 -reportprogress|300|-work|work|H:/ComputerArch/Comp-Arch-Org-Project/mux32.v|
+=======
+Z6 !s108 1550546708.000000
+!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux32.v|
+!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux32.v|
+!s101 -O0
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 !i113 1
 R6
 R7
 vmux4
+<<<<<<< HEAD
+=======
+R5
+!i10b 1
+!s100 HRz]=:ikHCjI1m7o^]0YV0
+IzaC@Xln?=CRhkSakz7_H@0
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 R0
 !i10b 1
 !s100 JF=`7SIBT1FPGU?USX7a23
 I[Q[@Jl=[?ESR9kh`QCfIC2
 R1
 R2
+<<<<<<< HEAD
+=======
+8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux4.v
+FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux4.v
+L0 6
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 R3
 8H:/ComputerArch/Comp-Arch-Org-Project/mux4.v
 FH:/ComputerArch/Comp-Arch-Org-Project/mux4.v
@@ -65,19 +117,37 @@ R4
 r1
 !s85 0
 31
+<<<<<<< HEAD
 R5
 !s107 H:/ComputerArch/Comp-Arch-Org-Project/mux4.v|
 !s90 -reportprogress|300|-work|work|H:/ComputerArch/Comp-Arch-Org-Project/mux4.v|
+=======
+R6
+!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux4.v|
+!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/mux4.v|
+!s101 -O0
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 !i113 1
 R6
 R7
 vrf
 R8
 !i10b 1
+<<<<<<< HEAD
 !s100 zTm^Add]I@IWMg0G=6HeM1
 Ie:zY79KE2SnLGeMdLWlob1
 R1
 R2
+=======
+!s100 Y]X9S761=bZX00UjaD]Ro3
+IQ2i8F_a8e7`EcefUSCPfi2
+R0
+R1
+R2
+8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/rf.v
+FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/rf.v
+L0 6
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 R3
 8H:/ComputerArch/Comp-Arch-Org-Project/rf.v
 FH:/ComputerArch/Comp-Arch-Org-Project/rf.v
@@ -86,19 +156,37 @@ R4
 r1
 !s85 0
 31
+<<<<<<< HEAD
 Z9 !s108 1550546785.000000
 !s107 H:/ComputerArch/Comp-Arch-Org-Project/rf.v|
 !s90 -reportprogress|300|-work|work|H:/ComputerArch/Comp-Arch-Org-Project/rf.v|
+=======
+R6
+!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/rf.v|
+!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/rf.v|
+!s101 -O0
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 !i113 1
 R6
 R7
 vsisc_tb
 R8
 !i10b 1
+<<<<<<< HEAD
 !s100 jQ?cd9SA]gEI5V`5YcCz70
 Ihe6lzNA69g;V98cA627Zn2
 R1
 R2
+=======
+!s100 X_Z<8j<8m4G8`Ro]DPh@`2
+I3_BczKB<F@KHmBJ2l641l2
+R0
+R1
+R2
+8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/sisc_tb_p1.v
+FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/sisc_tb_p1.v
+L0 6
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 R3
 8H:/ComputerArch/Comp-Arch-Org-Project/sisc_tb_p1.v
 FH:/ComputerArch/Comp-Arch-Org-Project/sisc_tb_p1.v
@@ -107,19 +195,39 @@ R4
 r1
 !s85 0
 31
+<<<<<<< HEAD
 R9
 !s107 H:/ComputerArch/Comp-Arch-Org-Project/sisc_tb_p1.v|
 !s90 -reportprogress|300|-work|work|H:/ComputerArch/Comp-Arch-Org-Project/sisc_tb_p1.v|
+=======
+R6
+!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/sisc_tb_p1.v|
+!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/sisc_tb_p1.v|
+!s101 -O0
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 !i113 1
 R6
 R7
 vstatreg
+<<<<<<< HEAD
 !s110 1550546786
 !i10b 1
 !s100 JfTQO;RhP[aKTeQF0kAhC1
 I8geZEgbo=0b8dZ9OY?DD`1
 R1
 R2
+=======
+R5
+!i10b 1
+!s100 N8RNk@:0mCn87Q8FG?AQL3
+IJW;=GT``jY?2Y`I2<]VGU3
+R0
+R1
+R2
+8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/statreg.v
+FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/statreg.v
+L0 6
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 R3
 8H:/ComputerArch/Comp-Arch-Org-Project/statreg.v
 FH:/ComputerArch/Comp-Arch-Org-Project/statreg.v
@@ -128,9 +236,16 @@ R4
 r1
 !s85 0
 31
+<<<<<<< HEAD
 R9
 !s107 H:/ComputerArch/Comp-Arch-Org-Project/statreg.v|
 !s90 -reportprogress|300|-work|work|H:/ComputerArch/Comp-Arch-Org-Project/statreg.v|
+=======
+R6
+!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/statreg.v|
+!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp-Arch-Org-Project/statreg.v|
+!s101 -O0
+>>>>>>> 7b30c5f2f1de4019efcb8983b5393b48abcd2235
 !i113 1
 R6
 R7
