@@ -38,8 +38,8 @@ module mux4 (instruction[23:20], instruction[15,12], sel, read_regb);
   initial
   
 // put a $monitor statement here.  
-
-
+$monitor($time,,"RSA=%b, RSB=%b, stat=%b, enable=%b, out=%b, alu_re=%b, alu_op=%b, instruct=%b, zero=%b, wb_sel=%b, write_data=%b, read_regb=%b, rf_we=%b, rst_f=%b, alu_op=%b, sel=%b  ",
+rsa,rsb,stat,enable,out,alu_result,alu_op,instruction,zero,wb_sel,write_data,read_regb,rf_we,rst_f,alu_op,sel);
 
 endmodule
 
