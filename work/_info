@@ -9,44 +9,44 @@ z2
 cModel Technology
 dC:/Comp_Arch_Org_Project
 valu
-!s110 1550546185
+!s110 1550546729
 !i10b 1
 !s100 W0L>RIQWAR4jllG6FV6gf1
-Ij>cNcl[gJLYnf^4N1AL812
+Ie11<NQoSgb]GBlW6^][I41
 Z0 VDg1SIo80bB@j0V0VzS_@n1
-Z1 dC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project
-Z2 w1550068928
-8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/alu.v
-FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/alu.v
+Z1 dC:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project
+Z2 w1550546487
+8C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/alu.v
+FC:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/alu.v
 L0 6
 Z3 OP;L;10.4a;61
 r1
 !s85 0
 31
-!s108 1550546185.000000
-!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/alu.v|
-!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/alu.v|
+!s108 1550546728.000000
+!s107 C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/alu.v|
+!s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/alu.v|
 !s101 -O0
 !i113 1
 Z4 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact -O0
 vmux32
-Z5 !s110 1550546186
+Z5 !s110 1550546730
 !i10b 1
 !s100 Acz_fIGhQd8CLP=K1MHX>1
-IgP^gjnUVN>Z;]G=K`@TWL0
+IP?eUH<4^zZJ`5dbRiTRNX0
 R0
 R1
 R2
-8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux32.v
-FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux32.v
+8C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux32.v
+FC:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux32.v
 L0 6
 R3
 r1
 !s85 0
 31
-Z6 !s108 1550546186.000000
-!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux32.v|
-!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux32.v|
+Z6 !s108 1550546730.000000
+!s107 C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux32.v|
+!s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux32.v|
 !s101 -O0
 !i113 1
 R4
@@ -54,20 +54,20 @@ vmux4
 R5
 !i10b 1
 !s100 HRz]=:ikHCjI1m7o^]0YV0
-IEB55<49O`hIAiL;RYg;i=1
+I:jnSBTB_I]8@@6Yeb?O6P1
 R0
 R1
 R2
-8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux4.v
-FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux4.v
+8C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux4.v
+FC:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux4.v
 L0 6
 R3
 r1
 !s85 0
 31
 R6
-!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux4.v|
-!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/mux4.v|
+!s107 C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux4.v|
+!s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/mux4.v|
 !s101 -O0
 !i113 1
 R4
@@ -75,20 +75,20 @@ vrf
 R5
 !i10b 1
 !s100 Y]X9S761=bZX00UjaD]Ro3
-IT@1oIEh8@ICShY4eLgGR`2
+IDF`?V6P91fFW?aZG6Ea]c2
 R0
 R1
 R2
-8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/rf.v
-FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/rf.v
+8C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/rf.v
+FC:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/rf.v
 L0 6
 R3
 r1
 !s85 0
 31
 R6
-!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/rf.v|
-!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/rf.v|
+!s107 C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/rf.v|
+!s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/rf.v|
 !s101 -O0
 !i113 1
 R4
@@ -96,41 +96,41 @@ vsisc_tb
 R5
 !i10b 1
 !s100 X_Z<8j<8m4G8`Ro]DPh@`2
-I_k9lS?hdVe5_lZo`g[D4R2
+IDlo^b8OU=dY0PmLRzK2Me1
 R0
 R1
 R2
-8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/sisc_tb_p1.v
-FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/sisc_tb_p1.v
+8C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/sisc_tb_p1.v
+FC:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/sisc_tb_p1.v
 L0 6
 R3
 r1
 !s85 0
 31
 R6
-!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/sisc_tb_p1.v|
-!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/sisc_tb_p1.v|
+!s107 C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/sisc_tb_p1.v|
+!s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/sisc_tb_p1.v|
 !s101 -O0
 !i113 1
 R4
 vstatreg
-!s110 1550546187
+!s110 1550546731
 !i10b 1
 !s100 N8RNk@:0mCn87Q8FG?AQL3
-Il=3@ZYaY6<cFd9A;]QX7_1
+Im?S2Ycc0=T2M:miW[hD[T0
 R0
 R1
 R2
-8C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/statreg.v
-FC:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/statreg.v
+8C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/statreg.v
+FC:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/statreg.v
 L0 6
 R3
 r1
 !s85 0
 31
-!s108 1550546187.000000
-!s107 C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/statreg.v|
-!s90 -reportprogress|300|-work|work|C:/Users/User/OneDrive - University of Iowa/2019 Spring Semester/Computer Architecture & Organization/Comp_Arch_Org_Project/statreg.v|
+R6
+!s107 C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/statreg.v|
+!s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/statreg.v|
 !s101 -O0
 !i113 1
 R4
