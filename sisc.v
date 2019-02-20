@@ -33,7 +33,7 @@ module alu (clk, rsa, rsb, instruction[15:0], alu_op, alu_result, stat, stat_en)
 module mux32 (zero, alu_result, wb_sel, write_data);
 module rf (clk, instruction[19:16], read_regb, instruction[23:20], write_data, rf_we, rsa, rsb);
 module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
-module mux4 (instruction[23:20], instruction[15,12], sel, read_regb);
+module mux4 (instruction[23:20], instruction[15:12], sel, read_regb);
 
   initial
   
