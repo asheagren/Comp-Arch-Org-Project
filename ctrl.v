@@ -81,9 +81,9 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
        add the new control signals here. */
    //my git clone also would not work so I don't know if this works...    
  	always @(*) begin
-	    next_state = state; // Default next state: stay where we are
+	    next_state = present_state; // Default next state: stay where we are
 	    out = 0; // Default output
-	    case (state)
+	    case (present_state)
 		IDLE : begin
  		    if (B) next_state = ERROR;
  		    else if (A) next_state = WAITFORB;
@@ -92,7 +92,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
  		    if (B) next_state = DONE;
  		end
  		DONE : begin
-		rf_wf = 1;
+		rf_we = 1;
 		end
 		ERROR : begin
  		end
