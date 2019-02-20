@@ -16,7 +16,7 @@ wire enable;
 wire out;
 wire[31:0] alu_result;
 wire[1:0] alu_op;
-wire[31:0] instruction
+wire[31:0] instruction;
 wire zero;
 wire wb_sel;
 wire[31:0] write_data;

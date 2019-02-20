@@ -381,7 +381,7 @@ R25
 R46
 R0
 valu
-Z47 !s110 1550550644
+!s110 1550703974
 !i10b 1
 R1
 R2
@@ -391,18 +391,18 @@ R5
 R6
 R7
 L0 6
-Z48 OP;L;10.4a;61
+Z47 OP;L;10.4a;61
 r1
 !s85 0
 31
-Z49 !s108 1550550644.000000
+!s108 1550703974.000000
 R10
 R11
 !s101 -O0
 !i113 1
-Z50 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact -O0
+Z48 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact -O0
 vmux32
-R47
+Z49 !s110 1550703975
 !i10b 1
 R12
 R13
@@ -412,18 +412,18 @@ R5
 R16
 R17
 L0 6
-R48
+R47
 r1
 !s85 0
 31
-R49
+Z50 !s108 1550703975.000000
 R18
 R19
 !s101 -O0
 !i113 1
-R50
+R48
 vmux4
-R47
+R49
 !i10b 1
 R21
 R22
@@ -433,18 +433,18 @@ R5
 R23
 R24
 L0 6
-R48
+R47
 r1
 !s85 0
 31
-R49
+R50
 R26
 R27
 !s101 -O0
 !i113 1
-R50
+R48
 vrf
-R47
+R49
 !i10b 1
 R28
 R29
@@ -454,18 +454,18 @@ R5
 R30
 R31
 L0 6
-R48
+R47
 r1
 !s85 0
 31
-R49
+R50
 R33
 R34
 !s101 -O0
 !i113 1
-R50
+R48
 vsisc_tb
-Z51 !s110 1550550645
+R49
 !i10b 1
 R35
 R36
@@ -475,18 +475,18 @@ R5
 R37
 R38
 L0 6
-R48
+R47
 r1
 !s85 0
 31
-R49
+R50
 R39
 R40
 !s101 -O0
 !i113 1
-R50
+R48
 vstatreg
-R51
+R49
 !i10b 1
 !s100 f8A5E0W;ze<;YHFLdNi3X2
 I^kGTK=?]=0FXJd<7UBIza0
@@ -496,13 +496,13 @@ w1550550247
 R42
 R43
 L0 6
-R48
+R47
 r1
 !s85 0
 31
-!s108 1550550645.000000
+R50
 !s107 C:/Users/Adam/Downloads/Verilog/Project/ECE3360Embedded/Comp-Arch-Org-Project/statreg.v|
 R44
 !s101 -O0
 !i113 1
-R50
+R48
