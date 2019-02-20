@@ -45,7 +45,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
 		
   /* TODO: Write a combination procedure that determines the next state of the fsm. */
   /* Chase: refer to slides 43, 49-53, 58 in 3b - Basic CPU.pptx under Processor Design link */
-<<<<<<< HEAD
+
 	if (present_state == start0) begin
 	    assign next_state = start1;
 	end		
@@ -72,9 +72,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
 	
 	else if (present_state == writeback) begin
 	   assign next_state = fetch;
-=======
 
->>>>>>> 1389f18dbd188a3a1641971bd7034e7b1fc42929
 	end	
 
 
