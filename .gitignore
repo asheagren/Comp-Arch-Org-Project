@@ -16,7 +16,7 @@
 *.html
 *.bsf
 *.qdb
-*work/*
+work/*
 *.qtl
 
 # ignore simulation output of ModelSim
