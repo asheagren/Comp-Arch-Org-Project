@@ -6,7 +6,7 @@
 module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
   input clk,rst_f, stat, opcode, mm;
   output [1:0]alu_op;
-  output wb_sel,rf_ew;
+  output wb_sel, rf_we;
   
   /* TODO: Declare the ports listed above as inputs or outputs */
   
@@ -32,42 +32,45 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
        //I'm not sure if this will work I can't ever get it to clone so I did it in github let me know if it doesn't and I'll 
        //work on it some more
        
-      always @(posedge clk)
-	present_state = next_state;
-      always @(negedge rst_f)
-	if(rst_f == 0)
-	  present_state = start1;
-  			
+	always @(posedge clk) begin
+	   present_state = next_state;
+	end 
+
+	always @(negedge clk)begin
+
+	    if(rst_f == 0) begin
+	        present_state = start1;
+	    end
+  	end
 		
   /* TODO: Write a combination procedure that determines the next state of the fsm. */
   /* Chase: refer to slides 43, 49-53, 58 in 3b - Basic CPU.pptx under Processor Design link */
-	if (present_state == start0)
-	begin
-		next_state <= start1;
+	if (present_state == start0) begin
+	    assign next_state = start1;
 	end		
-	if (present_state == start1)
-	begin
-		next_state <= fetch;
+
+	else if (present_state == start1) begin
+	  assign next_state = fetch;
 	end		
-	if (present_state == fetch)
-	begin
-		next_state <= decode;
-	end		
-	if (present_state == decode)
-	begin
-		next_state <= execute;
-	end		
-	if (present_state == execute)
-	begin
-		next_state <= mem;
-	end		
-	if (present_state == mem)
-	begin
-		next_state <= writeback;
-	end		
-	if (present_state == writeback)
-	begin
-		next_state <= fetch;
+
+	else if (present_state == fetch) begin
+	   assign next_state = decode;
+	end	
+	
+	else if (present_state == decode) begin
+	   assign next_state = execute;
+	end	
+	
+	else if (present_state == execute) begin
+	   assign next_state = mem;
+	end	
+	
+	else if (present_state == mem) begin
+	   assign next_state = writeback;
+	end	
+	
+	else if (present_state == writeback) begin
+	   assign next_state = fetch;
 	end	
 
 
@@ -76,7 +79,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
        add the new control signals here. */
    //my git clone also would not work so I don't know if this works...    
  	always @(*) begin
-	    nxtState = state; // Default next state: stay where we are
+	    next_state = state; // Default next state: stay where we are
 	    out = 0; // Default output
 	    case (state)
 		IDLE : begin
