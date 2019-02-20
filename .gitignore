@@ -16,8 +16,15 @@
 *.html
 *.bsf
 *.qdb
-*work/*
+work/*
 *.qtl
+
+modelsim.ini
+transcript
+work/*
+*.wlf
+wave*
+
 
 # ignore simulation output of ModelSim
 wlf*
