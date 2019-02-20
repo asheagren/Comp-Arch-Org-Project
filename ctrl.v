@@ -47,31 +47,31 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
   /* Chase: refer to slides 43, 49-53, 58 in 3b - Basic CPU.pptx under Processor Design link */
 
 	if (present_state == start0) begin
-	    assign next_state = start1;
+	     next_state = start1;
 	end		
 
 	else if (present_state == start1) begin
-	  assign next_state = fetch;
+	  	next_state = fetch;
 	end		
 
 	else if (present_state == fetch) begin
-	   assign next_state = decode;
+	    next_state = decode;
 	end	
 	
 	else if (present_state == decode) begin
-	   assign next_state = execute;
+	    next_state = execute;
 	end	
 	
 	else if (present_state == execute) begin
-	   assign next_state = mem;
+	    next_state = mem;
 	end	
 	
 	else if (present_state == mem) begin
-	   assign next_state = writeback;
+	    next_state = writeback;
 	end	
 	
 	else if (present_state == writeback) begin
-	   assign next_state = fetch;
+	    next_state = fetch;
 
 	end	
 
