@@ -46,6 +46,30 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
   /* TODO: Write a combination procedure that determines the next state of the fsm. */
   /* Chase: refer to slides 43, 49-53, 58 in 3b - Basic CPU.pptx under Processor Design link */
 	always @(present_state) begin
+		case(present_state)
+			start0:
+				next_state <= start0;
+			start1:
+				next_state <= fetch;
+			fetch:
+				next_state <= decode;
+			decode:
+				next_state <= execute;
+			execute:
+				next_state <= mem;
+			mem:
+				next_state <= writeback;
+			writeback:
+				next_state <= fetch;
+		endcase
+		
+	end
+		
+		
+
+
+/*
+
 		if (present_state == start0) begin
 	    	     next_state = start1;
 		end		
@@ -75,7 +99,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
 		end	
 	end
 
-
+*/
 
 
 
@@ -83,10 +107,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
        add the new control signals here. */
      
  always @ (posedge clk)
- 	begin : output_logic
- 	if (rst_f == start1) begin
- 		present_state <=  start0;
- 		next_state <=  start1;
+ 	begin
+ 	if (rst_f == 1'b0)
+ 		present_state <=  start1;
+	else
+ 		present_state <= next_state;
  	end
  	else begin
  	case(present_state)

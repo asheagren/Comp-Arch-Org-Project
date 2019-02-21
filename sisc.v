@@ -33,7 +33,7 @@ statreg statreg1(clk, stat, stat_en, out);
  alu alu1(clk, rsa, rsb, alu_instruction, alu_op, alu_result, stat, stat_en);
  mux32 mux321(zero, alu_result, wb_sel, write_data);
  rf rf1(clk, rf_instruction1, read_regb, rf_mux4_instruction, write_data, rf_we, rsa, rsb);
- ctrl ctrl1(clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
+ ctrl ctrl1(clk, rst_f, instruction[31:28], mm, stat, rf_we, alu_op, wb_sel);
  mux4 mux41(rf_mux4_instruction, mux4_instruction, sel, read_regb);
 
 initial
