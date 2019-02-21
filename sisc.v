@@ -17,17 +17,6 @@ wire[3:0] stat;
 wire enable;
 wire out;
 
-wire[1:0] alu_op;
-
-wire zero;
-wire wb_sel;
-wire[31:0] write_data;
-
-wire rf_we;
-wire rst_f;
-
-
-
 wire zero;
 wire wb_sel;
 wire[31:0] write_data;
