@@ -23,7 +23,7 @@ wire[31:0] write_data;
 output[3:0] read_regb;
 wire rf_we;
 wire rst_f;
-wire[1:0] alu_op;
+
 output sel;
 
 
