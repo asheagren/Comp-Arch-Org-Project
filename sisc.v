@@ -16,15 +16,15 @@ wire enable;
 wire out;
 wire[31:0] alu_result;
 wire[1:0] alu_op;
-wire[31:0] instruction;
+output[31:0] instruction;
 wire zero;
 wire wb_sel;
 wire[31:0] write_data;
-wire[3:0] read_regb;
+output[3:0] read_regb;
 wire rf_we;
 wire rst_f;
 wire[1:0] alu_op;
-wire sel;
+output sel;
 
 
 // component instantiation goes here
@@ -42,5 +42,3 @@ $monitor($time,,"RSA=%b, RSB=%b, stat=%b, enable=%b, out=%b, alu_re=%b, alu_op=%
 rsa,rsb,stat,enable,out,alu_result,alu_op,instruction,zero,wb_sel,write_data,read_regb,rf_we,rst_f,alu_op,sel);
 
 endmodule
-
-
