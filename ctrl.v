@@ -4,7 +4,8 @@
 `timescale 1ns/100ps
 
 module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
-  input clk,rst_f, stat, opcode, mm;
+  input clk,rst_f;
+  input[3:0] opcode, mm, stat;
   output [1:0]alu_op;
   output wb_sel, rf_we;
   
@@ -46,6 +47,30 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
   /* TODO: Write a combination procedure that determines the next state of the fsm. */
   /* Chase: refer to slides 43, 49-53, 58 in 3b - Basic CPU.pptx under Processor Design link */
 	always @(present_state) begin
+		case(present_state)
+			start0:
+				next_state <= start0;
+			start1:
+				next_state <= fetch;
+			fetch:
+				next_state <= decode;
+			decode:
+				next_state <= execute;
+			execute:
+				next_state <= mem;
+			mem:
+				next_state <= writeback;
+			writeback:
+				next_state <= fetch;
+		endcase
+		
+	end
+		
+		
+
+
+/*
+
 		if (present_state == start0) begin
 	    	     next_state = start1;
 		end		
@@ -75,7 +100,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
 		end	
 	end
 
-
+*/
 
 
 

@@ -13,30 +13,32 @@ module sisc (clk, rst_f, instruction);
 // declare all internal wires here
 wire[31:0] rsa;
 wire[31:0] rsb;
-wire[3:0] stat;
+wire[3:0] stat_in;
 wire enable;
-wire out;
-
-wire zero;
+wire[3:0] stat_out;
+wire[31:0] zero_mux_32;
+wire zero_mux_4 = 'b0;
 wire wb_sel;
 wire[31:0] write_data;
 wire[3:0] read_regb;
 wire rf_we;
 wire[1:0] alu_op;
 wire sel;
-
+wire[31:0] alu_result;
 wire stat_en;
+wire[3:0] mux4_out;
 
 
 // component instantiation goes here
-statreg statreg1(clk, stat, stat_en, out);
- alu alu1(clk, rsa, rsb, alu_instruction, alu_op, alu_result, stat, stat_en);
- mux32 mux321(zero, alu_result, wb_sel, write_data);
- rf rf1(clk, rf_instruction1, read_regb, rf_mux4_instruction, write_data, rf_we, rsa, rsb);
- ctrl ctrl1(clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
- mux4 mux41(rf_mux4_instruction, mux4_instruction, sel, read_regb);
+statreg statreg1(clk, stat_in, stat_en, stat_out);
+alu alu1(clk, rsa, rsb, instruction[15:0], alu_op, alu_result, stat_in, stat_en);
+mux32 mux321(zero_mux_32, alu_result, wb_sel, write_data);
+rf rf1(clk, instruction[19:16], mux4_out, instruction[23:20], write_data, rf_we, rsa, rsb);
+ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel); 
+mux4 mux41(instruction[23:20], instruction[15:12], zero_mux_4, mux4_out);
 
 initial
 
-	$monitor($time,,"RSA=%b, RSB=%b, stat=%b, enable=%b, out=%b, alu_re=%b, alu_op=%b, instruct=%b, zero=%b, wb_sel=%b, write_data=%b, read_regb=%b, rf_we=%b, rst_f=%b, alu_op=%b, sel=%b  ", rsa,rsb,stat,enable,out,alu_result,alu_op,instruction,zero,wb_sel,write_data,read_regb,rf_we,rst_f,alu_op,sel);
+	$monitor($time,,"RSA=%b, RSB=%b, stat_in=%b, enable=%b, out=%b, alu_re=%b, alu_op=%b, instruct=%b, wb_sel=%b, write_data=%b, read_regb=%b, rf_we=%b, rst_f=%b, alu_op=%b, sel=%b  ",
+ rsa,rsb,stat_in,enable,stat_out,alu_result,alu_op,instruction,wb_sel,write_data,read_regb,rf_we,rst_f,alu_op,sel);
 endmodule
