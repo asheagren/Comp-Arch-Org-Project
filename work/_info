@@ -381,7 +381,7 @@ r1
 31
 R0
 valu
-Z16 !s110 1551036065
+Z16 !s110 1551036343
 !i10b 1
 R12
 I@[Bk:1_>cfD5>:M8N`j6R2
@@ -395,7 +395,7 @@ Z19 OP;L;10.4a;61
 r1
 !s85 0
 31
-!s108 1551036064.000000
+!s108 1551036342.000000
 !s107 C:/Users/Adam/Downloads/Verilog/Project/Comp-Arch-Org-Project/alu.v|
 !s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/Comp-Arch-Org-Project/alu.v|
 !s101 -O0
@@ -416,7 +416,7 @@ R19
 r1
 !s85 0
 31
-Z21 !s108 1551036065.000000
+Z21 !s108 1551036343.000000
 !s107 C:/Users/Adam/Downloads/Verilog/Project/Comp-Arch-Org-Project/ctrl.v|
 !s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/Comp-Arch-Org-Project/ctrl.v|
 !s101 -O0
@@ -507,7 +507,7 @@ R21
 !i113 1
 R20
 vsisc_tb
-Z22 !s110 1551036066
+R16
 !i10b 1
 !s100 >KB;fJheD<VFhZXSYL@a[2
 IKElRA6c:o?;_W2?6TT8<K1
@@ -528,7 +528,7 @@ R21
 !i113 1
 R20
 vstatreg
-R22
+!s110 1551036344
 !i10b 1
 !s100 f8A5E0W;ze<;YHFLdNi3X2
 Ikce`i1@4G:3aeLXmS^]=A3
@@ -542,7 +542,7 @@ R19
 r1
 !s85 0
 31
-!s108 1551036066.000000
+!s108 1551036344.000000
 !s107 C:/Users/Adam/Downloads/Verilog/Project/Comp-Arch-Org-Project/statreg.v|
 !s90 -reportprogress|300|-work|work|C:/Users/Adam/Downloads/Verilog/Project/Comp-Arch-Org-Project/statreg.v|
 !s101 -O0
