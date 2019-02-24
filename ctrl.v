@@ -68,7 +68,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
 				next_state <= writeback;
 			end
 			writeback: begin
-				next_state <= fetch;
+				next_state <= start1;
 			end
 		endcase
 		
@@ -79,8 +79,23 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
    
  always @ (posedge clk) begin
 	case(present_state) 
+		fetch: begin
+			rf_we = 1'b0;
+			wb_sel = 1'b1;
+			alu_op = 2'b00;
+		end
 		decode: begin
-			rf_we = 1'b1;
+			/*
+			if(opcode == 4'b1000) 
+				alu_op[0] <= 1'b1;
+			else
+				alu_op[0] <= 1'b0;
+			if(mm == 4'b1000)
+				alu_op[1] <= 1'b1;
+			else
+				alu_op[1] <= 1'b0;
+		*/end
+		execute: begin
 			if(opcode == 4'b1000) 
 				alu_op[0] <= 1'b1;
 			else
@@ -90,16 +105,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
 			else
 				alu_op[1] <= 1'b0;
 		end
-		writeback: begin
+		mem: begin
+			
 			rf_we = 1'b1;
-			wb_sel = 1'b0;
 		end
-
-
-		default: begin
-			wb_sel = 1'b1;
-			rf_we = 1'b0;
-		end
+		
 
 	endcase
 	

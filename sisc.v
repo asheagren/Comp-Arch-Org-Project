@@ -37,9 +37,8 @@ ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, 
 mux4 mux41(instruction[23:20], instruction[15:12], zero_mux_4, mux4_out);
 
 initial
-
-	/*$monitor($time,,"RSA=%b, RSB=%b, stat_in=%b, enable=%b, out=%b, alu_re=%b, alu_op=%b, instruct=%b, wb_sel=%b, write_data=%b, read_regb=%b, rf_we=%b, rst_f=%b, alu_op=%b, sel=%b  ",
- rsa,rsb,stat_in,enable,stat_out,alu_result,alu_op,instruction,wb_sel,write_data,read_regb,rf_we,rst_f,alu_op,sel);*/
-	$monitor($time,,"IR=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b, write_data=%b",
-instruction, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we, write_data);
+	/*$monitor($time,,"IR=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b, write_data=%b",
+instruction, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we, write_data);*/
+$monitor($time,,"R0=%h, R1=%h, R2=%b, R3=%b, R4=%b, R5=%b",
+rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5]);
 endmodule
