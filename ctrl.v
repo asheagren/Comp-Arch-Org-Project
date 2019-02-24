@@ -4,13 +4,13 @@
 `timescale 1ns/100ps
 
 module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
+
+  /* TODO: Declare the ports listed above as inputs or outputs */
   input clk,rst_f;
   input[3:0] opcode, mm, stat;
-  output [1:0]alu_op;
-  output wb_sel, rf_we;
-  
-  /* TODO: Declare the ports listed above as inputs or outputs */
-  
+  output reg[1:0] alu_op;
+  output reg wb_sel, rf_we;
+  reg wb_wire, rf_wire;
   
   // states
   parameter start0 = 0, start1 = 1, fetch = 2, decode = 3, execute = 4, mem = 5, writeback = 6;
@@ -47,92 +47,58 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
   /* TODO: Write a combination procedure that determines the next state of the fsm. */
   /* Chase: refer to slides 43, 49-53, 58 in 3b - Basic CPU.pptx under Processor Design link */
 	always @(present_state) begin
+//$monitor("present_state = %b, next_state=%b",present_state, next_state);
 		case(present_state)
-			start0:
+			start0: begin
 				next_state <= start0;
-			start1:
+			end
+			start1: begin
 				next_state <= fetch;
-			fetch:
+			end 
+			fetch: begin
 				next_state <= decode;
-			decode:
+			end
+			decode: begin
 				next_state <= execute;
-			execute:
+			end
+			execute: begin
 				next_state <= mem;
-			mem:
+			end
+			mem: begin
 				next_state <= writeback;
-			writeback:
-				next_state <= fetch;
+			end
+			writeback: begin
+				next_state <= start1;
+			end
 		endcase
 		
 	end
-		
-		
-
-
-/*
-
-		if (present_state == start0) begin
-	    	     next_state = start1;
-		end		
-
-		else if (present_state == start1) begin
-	  	    next_state = fetch;
-		end		
-	
-		else if (present_state == fetch) begin
-		    next_state = decode;
-		end
-		
-		else if (present_state == decode) begin
-		     next_state = execute;
-		end	
-		
-		else if (present_state == execute) begin
-		      next_state = mem;
-		end	
-		
-		else if (present_state == mem) begin
-		      next_state = writeback;
-		end	
-		
-		else if (present_state == writeback) begin
-		      next_state = fetch;
-		end	
-	end
-
-*/
-
-
 
   /* TODO: Generate outputs based on the FSM states and inputs. For Parts 2, 3 and 4 you will
        add the new control signals here. */
-     
- always @ (posedge clk)
- 	begin : output_logic
- 	if (rst_f == start1) begin
- 		present_state <=  start0;
- 		next_state <=  start1;
- 	end
- 	else begin
- 	case(present_state)
- 	decode : begin
-        	present_state <= start0;
- 		next_state <=  start0;
- 	end
- 	fetch : begin
-                present_state <=  start1;
-                next_state <=  start0;
-        end
- 	mem : begin
-                present_state <=  start0;
-                next_state <=  start1;
-        end
-    	default : begin
-                present_state <=  start0;
-                next_state <=  start0;
-        end
- 	endcase
- end
+   
+ always @ (present_state) begin
+	case(present_state) 
+		decode: begin
+			rf_we = 1'b1;
+			//wb_sel  = 1'b0;
+			alu_op <= mm[3] | opcode[3];
+		end
+		writeback: begin
+			rf_we = 1'b1;
+			wb_sel = 1'b0;
+		end
+		//mem: begin
+			//rf_we = 1'b1;
+		//end
+
+		default: begin
+			wb_sel = 1'b1;
+			rf_we = 1'b0;
+		end
+
+	endcase
+	
  end
 // Halt on HLT instruction
   
