@@ -13,11 +13,11 @@ module sisc (clk, rst_f, instruction);
 // declare all internal wires here
 wire[31:0] rsa;
 wire[31:0] rsb;
-wire[3:0] stat_in;
+wire[3:0] cc;
 wire enable;
 wire[3:0] stat_out;
-wire[31:0] zero_mux_32;
-wire zero_mux_4 = 'b0;
+wire[31:0] zero_mux_32 = 32'h00000000;
+wire zero_mux_4 = 4'b0000;
 wire wb_sel;
 wire[31:0] write_data;
 wire[3:0] read_regb;
@@ -26,19 +26,34 @@ wire[1:0] alu_op;
 wire[31:0] alu_result;
 wire stat_en;
 wire[3:0] mux4_out;
+wire rb_sel;
 
 
 // component instantiation goes here
-statreg statreg1(clk, stat_in, stat_en, stat_out);
-alu alu1(clk, rsa, rsb, instruction[15:0], alu_op, alu_result, stat_in, stat_en);
-mux32 mux321(zero_mux_32, alu_result, wb_sel, write_data);
-rf rf1(clk, instruction[19:16], mux4_out, instruction[23:20], write_data, rf_we, rsa, rsb);
-ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel); 
-mux4 mux41(instruction[23:20], instruction[15:12], zero_mux_4, mux4_out);
+
+//in_a, in_b, sel--could be rb_sel, out
+mux4 mux41(.in_a(instruction[15:12]),.in_b(instruction[23:20]), .sel(rb_sel), .out(mux4_out));
+
+//clk, read_rega, read_regb, write_reg, write_data, rf_we, rsa, rsb
+rf rf1(.clk(clk), .read_rega(instruction[19:16]), .read_regb(mux4_out), .write_reg(instruction[23:20]), .write_data(write_data), .rf_we(rf_we), .rsa(rsa), .rsb(rsb));
+
+//clk, rsa, rsb, imm, alu_op, alu_result, stat, stat_en
+alu alu1(clk, rsa, rsb, instruction[15:0], alu_op, alu_result, cc, stat_en);
+
+//in_a, in_b, sel, out
+mux32 mux321(alu_result,zero_mux_32, wb_sel, write_data);
+
+//clk, in, stat_en, out
+statreg statreg1(.clk(clk), .in(cc), .stat_en(stat_en), .out(stat_out));
+
+//clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel, rd_sel
+ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel); 
+
+
 
 initial
-	/*$monitor($time,,"IR=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b, write_data=%b",
-instruction, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we, write_data);*/
-$monitor($time,,"R0=%h, R1=%h, R2=%b, R3=%b, R4=%b, R5=%b",
-rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5]);
+	$monitor($time,,"IR=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b,RD_SEL=%b, write_data=%b",
+instruction, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we,rb_sel, write_data);
+/*$monitor($time,,"R0=%h, R1=%h, R2=%b, R3=%b, R4=%b, R5=%b",
+rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5]);*/
 endmodule

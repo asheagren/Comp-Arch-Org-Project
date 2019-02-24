@@ -3,13 +3,13 @@
 
 `timescale 1ns/100ps
 
-module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
+module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rd_sel);
 
   /* TODO: Declare the ports listed above as inputs or outputs */
   input clk,rst_f;
   input[3:0] opcode, mm, stat;
   output reg[1:0] alu_op;
-  output reg wb_sel, rf_we;
+  output reg wb_sel, rf_we, rd_sel;
   reg wb_wire, rf_wire;
   
   // states
@@ -80,9 +80,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
  always @ (posedge clk) begin
 	case(present_state) 
 		fetch: begin
-			rf_we = 1'b0;
-			wb_sel = 1'b1;
-			alu_op = 2'b00;
+			rf_we <= 1'b0;
+			wb_sel <= 1'b0;
+			//alu_op <= 2'b00;
+			rd_sel <= 1'b0;
+
 		end
 		decode: begin
 			/*
@@ -107,7 +109,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
 		end
 		mem: begin
 			
-			rf_we = 1'b1;
+			rf_we <= 1'b1;
 		end
 		
 
