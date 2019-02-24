@@ -21,7 +21,6 @@ work/*
 
 modelsim.ini
 transcript
-work/
 *.wlf
 wave*
 

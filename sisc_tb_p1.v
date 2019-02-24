@@ -39,18 +39,31 @@ module sisc_tb;
   initial
   begin
     // To test all of the arithmetic instructions:
+	$display("\n\nNOP");
     #36 ir = 32'h00000000; //NOP
+	$display("\n\nADI  R1,R0,1");
     #50 ir = 32'h88100001; //ADI  R1,R0,1     R1 <- R0 + (0x0000)0001
+	$display("\n\nADI  R1,R0,1");
     #50 ir = 32'h80211001; //ADD  R2,R1,R1,   R2 <- R1 + R1
+	$display("\n\nADD  R2,R1,R1");
     #50 ir = 32'h8032200B; //SHL  R3,R2,R2    R3 <- R2 << [R2]
+	$display("\n\nSHL  R3,R2,R2");
     #50 ir = 32'h80412002; //SUB  R4,R1,R2,   R4 <- R1 - R2
+	$display("\n\nSUB  R4,R1,R2");
     #50 ir = 32'h8044300A; //SHR  R4,R4,R3    R4 <- R4 >> [R3]
+	$display("\n\nSHR  R4,R4,R3");
     #50 ir = 32'h80234007; //XOR  R2,R3,R4    R2 <- R3 ^ R4
+	$display("\n\nXOR  R2,R3,R4 ");
     #50 ir = 32'h80220004; //NOT  R2,R2       R2 <- ~R2
+	$display("\n\nNOT  R2,R2");
     #50 ir = 32'h80421009; //RTL  R4,R2,R1    R4 <- R2 <.< [R1]
+	$display("\n\nRTL  R4,R2,R1");
     #50 ir = 32'h80524005; //OR   R5,R2,R4    R5 <- R2 | R4
+	$display("\n\nOR   R5,R2,R4");
     #50 ir = 32'h80324006; //AND  R3,R2,R4    R3 <- R2 & R4
+	$display("\n\nAND  R3,R2,R4");
     #50 ir = 32'h00000000; //NOP
+	$display("\n\nNOP");
 
 	/*
 	 * At this point, registers should be as follows:
@@ -62,12 +75,19 @@ module sisc_tb;
 
     // To test status code generation:
     #50 ir = 32'h00000000; //NOP
+	$display("\n\nNOP");
     #50 ir = 32'h88100001; //ADI  R1,R0,1     R1 <- R0 + (0x0000)0001 (STAT: 0000)
+	$display("\n\nADI  R1,R0,1");
     #50 ir = 32'h80211002; //SUB  R2,R1,R1    R2 <- R1 - R1           (STAT: 0001)
+	$display("\n\nSUB  R2,R1,R1");
     #50 ir = 32'h80201002; //SUB  R2,R0,R1    R2 <- R0 - R1           (STAT: 1010)
+	$display("\n\nSUB  R2,R0,R1");
     #50 ir = 32'h80311008; //RTR  R3,R1,R1    R3 <- R1 >> [R1]
+	$display("\n\nRTR  R3,R1,R1");
     #50 ir = 32'h80423001; //ADD  R4,R2,R3    R4 <- R2 + R3           (STAT: 1100)
+	$display("\n\nADD  R4,R2,R3 ");
     #50 ir = 32'hF0000000; //HLT
+	$display("\n\nHLT");
 
   end
  
