@@ -4,7 +4,8 @@
 `timescale 1ns/100ps
 
 module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
-  input clk,rst_f, stat, opcode, mm;
+  input clk,rst_f;
+  input[3:0] opcode, mm, stat;
   output [1:0]alu_op;
   output wb_sel, rf_we;
   
@@ -107,11 +108,10 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel);
        add the new control signals here. */
      
  always @ (posedge clk)
- 	begin
- 	if (rst_f == 1'b0)
- 		present_state <=  start1;
-	else
- 		present_state <= next_state;
+ 	begin : output_logic
+ 	if (rst_f == start1) begin
+ 		present_state <=  start0;
+ 		next_state <=  start1;
  	end
  	else begin
  	case(present_state)
