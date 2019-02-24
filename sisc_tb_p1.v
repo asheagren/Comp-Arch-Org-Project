@@ -59,6 +59,7 @@ module sisc_tb;
 	 *   R3: FE000000		R0, R6-R15: 00000000
 	 */
 
+
     // To test status code generation:
     #50 ir = 32'h00000000; //NOP
     #50 ir = 32'h88100001; //ADI  R1,R0,1     R1 <- R0 + (0x0000)0001 (STAT: 0000)
