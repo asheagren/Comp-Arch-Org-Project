@@ -35,5 +35,7 @@ cov*/
 transcript*
 sc_dpiheader.h
 vsim.dbg
+work/_info
+work/_lib.qdb
 
 # End of https://www.gitignore.io/api/modelsim
