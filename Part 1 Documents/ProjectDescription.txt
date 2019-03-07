@@ -1,0 +1,19 @@
+Team Members:
+Ryan Price
+Chase Johnson
+Adam Sheagren
+
+
+
+
+
+
+Description:
+The project consists of building and testing, and modifying a Simple Instruction Set Computer processor using Verilog and ModelSim.
+We started by creating a state diagram, which helped our implementation of this part. Ctrl. v provides the various control
+signals to the other components. We implemented a sequence procedure that progresses the finite state machine on the positive edge of the clock. 
+We wrote the combination procedure that determined the next state of the finite state machine. Then, the output was created that is based on the
+finite state machine and the inputs, for part 1 only the states: fetch, execute, and mem were used. In sisc.v we declared internal wires for 
+the component instantiation, and created a monitor. For this part we implemented the register and immediate operand instructions and halt instructions.
+Finally, we modified the testbench file which instantiates the sisc.v file. This file also provides sisc.v with the reset and clock signals as well 
+as a set of simulated instructions.

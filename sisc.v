@@ -52,8 +52,16 @@ ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, 
 
 
 initial
-	$monitor($time,,"IR=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b,RD_SEL=%b, write_data=%b",
+
+/*Good one*/	$monitor($time,,"IR=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b,RD_SEL=%b, write_data=%b",
 instruction, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we,rb_sel, write_data);
+
+
+/*Debug stat*/	/*$monitor("STAT=%b", stat_out);*/
+
+/*Debug registers */	/*$monitor("R0=%b, R1=%b, R2=%b, R3=%b, R4=%b, R5=%b",
+rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5]);*/
+
 /*$monitor($time,,"R0=%h, R1=%h, R2=%b, R3=%b, R4=%b, R5=%b",
 rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5]);*/
 endmodule

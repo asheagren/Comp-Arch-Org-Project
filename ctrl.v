@@ -86,23 +86,20 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rd_sel);
 			rd_sel <= 1'b0;
 
 		end
-		decode: begin
-			/*
-			if(opcode == 4'b1000) 
-				alu_op[0] <= 1'b1;
-			else
-				alu_op[0] <= 1'b0;
-			if(mm == 4'b1000)
-				alu_op[1] <= 1'b1;
-			else
-				alu_op[1] <= 1'b0;
-		*/end
+
 		execute: begin
 
 			if(mm == 4'b1000)
-				alu_op <= 2'b01;
+				if(opcode == 4'b1000)
+					alu_op <= 2'b01;
+				else
+					alu_op <= 2'b11;
 			else
-				alu_op <= 2'b00;
+				if(opcode == 4'b1000)
+					alu_op <= 2'b00;
+				else
+					alu_op <= 2'b10;
+			
 		end
 		mem: begin
 			
