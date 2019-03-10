@@ -50,12 +50,11 @@ module pc (clk, br_addr, pc_sel, pc_write, pc_rst, pc_out);
   
   always @(br_addr, pc_out, pc_sel)
   begin
+//$monitor("br_addr = %h", br_addr);
 //$monitor("pc_in = %b",pc_in[15:0]);
     if (pc_sel == 1'b0)
-
       pc_in <= pc_out + 1;
     else
-
       pc_in <= br_addr;
   end
 endmodule

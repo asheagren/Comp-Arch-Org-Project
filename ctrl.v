@@ -86,18 +86,54 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		start1: begin
-			//rb_sel <= 1'b0;
-			ir_load <= 1'b0;
+			rb_sel <= 1'b0;
+			//ir_load <= 1'b1;
+			//ir_load <= 1'b0;
+			br_sel <= 1'b0;
 		end
 
 		fetch: begin
 			rf_we <= 1'b0;
 			wb_sel <= 1'b0;
 			alu_op <= 2'b00;
-			rb_sel <= 1'b0;
+			//rb_sel <= 1'b0;
 			pc_write <= 1'b1;
 			ir_load <= 1'b1;
+			// ir_load <= 1'b0;
+			if (opcode == BNE) begin
+				$display("break me off a piece of that branch for 6");
+				
+				br_sel <= 1'b1;
+				//pc_sel <= 1'b1;
+			end
+				//5
+			else if(opcode == BRR) begin
+				$display("break me off a piece of that branch for 5");
+				
+				br_sel <= 1'b1;
+				//pc_sel <= 1'b1;
+			end
+				//7
+			else if(opcode == BNR) begin
+				$display("break me off a piece of that branch 7");
+				
+				br_sel <= 1'b1;
+				//pc_sel <= 1'b1;
+			end
+				//4
+			else if(opcode == BRA) begin
+				$display("break me off a piece of that branch 4");	
+						
+				br_sel <= 1'b0;
+				//pc_sel <= 1'b1;
+			end
 
+			else begin
+				$display("break me off a piece of that do not branch");
+				
+				//br_sel <= 1'b1;
+				//pc_sel <= 1'b0;
+			end
 
 
 		end
@@ -105,39 +141,43 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		decode: begin
 					//6
 
-		
-			ir_load <= 1'b0;
-			pc_write <= 1'b0;
-			if (opcode == 4'b0110) begin
+			if (opcode == BNE) begin
 				$display("break me off a piece of that branch for 6");
-				br_sel <= 1'b0;
+				
+				//br_sel <= 1'b0;
 				pc_sel <= 1'b1;
 			end
 				//5
-			else if(opcode == 4'b0101) begin
+			else if(opcode == BRR) begin
 				$display("break me off a piece of that branch for 5");
-				br_sel <= 1'b1;
+				
+				//br_sel <= 1'b1;
 				pc_sel <= 1'b1;
 			end
 				//7
-			else if(opcode == 4'b0111) begin
+			else if(opcode == BNR) begin
 				$display("break me off a piece of that branch 7");
-				br_sel <= 1'b1;
+				
+				//br_sel <= 1'b1;
 				pc_sel <= 1'b1;
 			end
 				//4
-			else if(opcode == 4'b0100) begin
-				$display("break me off a piece of that branch 4");				
-				br_sel <= 1'b0;
+			else if(opcode == BRA) begin
+				$display("break me off a piece of that branch 4");	
+						
+				//br_sel <= 1'b0;
 				pc_sel <= 1'b1;
-				
 			end
 
 			else begin
 				$display("break me off a piece of that do not branch");
+				
 				//br_sel <= 1'b1;
 				pc_sel <= 1'b0;
 			end
+			ir_load <= 1'b0;
+			pc_write <= 1'b0;
+
 
 		end
 
@@ -145,12 +185,12 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				//6			5			7		
 
 
-		
+			
 			ir_load <= 1'b0;
 			
 
 			if(mm == am_imm) begin
-				rb_sel <= 1'b1;
+				//rb_sel <= 1'b1;
 				if(opcode == ALU_OP) begin
 					alu_op <= 2'b01;
 				end
@@ -159,7 +199,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				end
 			end
 			else begin
-				rb_sel <= 1'b0;
+				//rb_sel <= 1'b0;
 
 				if(opcode == ALU_OP) begin
 					alu_op <= 2'b00;
@@ -168,13 +208,22 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					alu_op <= 2'b10;
 				end
 			end
+
+			
+
+
+
+
+
+			
+
+
 		end
 		mem: begin
-			
 			ir_load <= 1'b0;
 			rf_we <= 1'b1;
 		end
-		
+	
 
 	endcase
 	
