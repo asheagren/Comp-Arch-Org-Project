@@ -33,23 +33,29 @@ module pc (clk, br_addr, pc_sel, pc_write, pc_rst, pc_out);
 
   reg    [15:0] pc_in;
   reg    [15:0] pc_out;
- 
+
+
   // program counter latch
-  always @(posedge clk)
-  begin
+  always @(posedge clk) begin
+
     if (pc_rst == 1'b1)
       pc_out <= 16'h0000;
+
     else
+
       if (pc_write == 1'b1)
+ //$monitor("pc_out = %b",pc_out[15:0]);
         pc_out <= pc_in;
   end
   
   always @(br_addr, pc_out, pc_sel)
   begin
+//$monitor("pc_in = %b",pc_in[15:0]);
     if (pc_sel == 1'b0)
+
       pc_in <= pc_out + 1;
     else
+
       pc_in <= br_addr;
   end
-
 endmodule

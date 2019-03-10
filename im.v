@@ -24,6 +24,7 @@ module im (read_addr, read_data);
 
   // load program
   initial begin : prog_load
+$display("Loading rom.");
     $readmemh("imem.data",ram_array);
   end
  

@@ -8,14 +8,15 @@ module sisc_tb;
   parameter    tclk = 10.0;    
   reg          clk;
   reg          rst_f;
+  //reg[31:0]    ir;
 
   // component instantiation
   // "uut" stands for "Unit Under Test"
-  // sisc uut (.clk   (clk),
+  //sisc uut (.clk   (clk),
   //          .rst_f (rst_f),
   //          .ir    (ir));
  
-  sisc uut ( clk, rst_f);
+  sisc uut ( clk, rst_f, );
 
   // clock driver
   initial

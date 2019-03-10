@@ -3,13 +3,13 @@
 
 `timescale 1ns/100ps
 
-module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rd_sel);
-
+module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel);
   /* TODO: Declare the ports listed above as inputs or outputs */
   input clk,rst_f;
   input[3:0] opcode, mm, stat;
   output reg[1:0] alu_op;
-  output reg wb_sel, rf_we, rd_sel;
+  output reg wb_sel, rf_we, rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel;
+  
   reg wb_wire, rf_wire;
   
   // states
@@ -34,6 +34,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rd_sel);
        //work on it some more
        
 	always @(posedge clk) begin
+	   pc_rst = 1'b0;
 	   present_state = next_state;
 	end 
 
@@ -41,6 +42,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rd_sel);
 
 	    if(rst_f == 0) begin
 	        present_state = start1;
+		pc_rst = 1'b1;
 	    end
   	end
 		
@@ -50,7 +52,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rd_sel);
 //$monitor("present_state = %b, next_state=%b",present_state, next_state);
 		case(present_state)
 			start0: begin
-				next_state <= start0;
+				next_state <= start1;
 			end
 			start1: begin
 				next_state <= fetch;
@@ -79,30 +81,97 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rd_sel);
    
  always @ (posedge clk) begin
 	case(present_state) 
+		start0: begin
+			//pc_sel <= 1'b1;
+		end
+
+		start1: begin
+			//rb_sel <= 1'b0;
+			ir_load <= 1'b0;
+		end
+
 		fetch: begin
 			rf_we <= 1'b0;
 			wb_sel <= 1'b0;
 			alu_op <= 2'b00;
-			rd_sel <= 1'b0;
+			rb_sel <= 1'b0;
+			pc_write <= 1'b1;
+			ir_load <= 1'b1;
+
+
+
+		end
+
+		decode: begin
+					//6
+
+		
+			ir_load <= 1'b0;
+			pc_write <= 1'b0;
+			if (opcode == 4'b0110) begin
+				$display("break me off a piece of that branch for 6");
+				br_sel <= 1'b0;
+				pc_sel <= 1'b1;
+			end
+				//5
+			else if(opcode == 4'b0101) begin
+				$display("break me off a piece of that branch for 5");
+				br_sel <= 1'b1;
+				pc_sel <= 1'b1;
+			end
+				//7
+			else if(opcode == 4'b0111) begin
+				$display("break me off a piece of that branch 7");
+				br_sel <= 1'b1;
+				pc_sel <= 1'b1;
+			end
+				//4
+			else if(opcode == 4'b0100) begin
+				$display("break me off a piece of that branch 4");				
+				br_sel <= 1'b0;
+				pc_sel <= 1'b1;
+				
+			end
+
+			else begin
+				$display("break me off a piece of that do not branch");
+				//br_sel <= 1'b1;
+				pc_sel <= 1'b0;
+			end
 
 		end
 
 		execute: begin
+				//6			5			7		
 
-			if(mm == 4'b1000)
-				if(opcode == 4'b1000)
-					alu_op <= 2'b01;
-				else
-					alu_op <= 2'b11;
-			else
-				if(opcode == 4'b1000)
-					alu_op <= 2'b00;
-				else
-					alu_op <= 2'b10;
+
+		
+			ir_load <= 1'b0;
 			
+
+			if(mm == am_imm) begin
+				rb_sel <= 1'b1;
+				if(opcode == ALU_OP) begin
+					alu_op <= 2'b01;
+				end
+				else begin
+					alu_op <= 2'b11;
+				end
+			end
+			else begin
+				rb_sel <= 1'b0;
+
+				if(opcode == ALU_OP) begin
+					alu_op <= 2'b00;
+				end
+				else begin
+					alu_op <= 2'b10;
+				end
+			end
 		end
 		mem: begin
 			
+			ir_load <= 1'b0;
 			rf_we <= 1'b1;
 		end
 		

@@ -27,7 +27,18 @@ wire[31:0] alu_result;
 wire stat_en;
 wire[3:0] mux4_out;
 wire rb_sel;
-
+wire[15:0] pc;
+wire[15:0] br;
+wire ir;
+wire[15:0] im;
+wire pc_sel;
+wire pc_write;
+wire pc_rst;
+wire[15:0] pc_out;
+wire ir_load;
+wire[31:0] instr_in;
+wire br_sel;
+wire[15:0] br_out;
 
 // component instantiation goes here
 
@@ -47,15 +58,21 @@ mux32 mux321(alu_result,zero_mux_32, wb_sel, write_data);
 statreg statreg1(.clk(clk), .in(cc), .stat_en(stat_en), .out(stat_out));
 
 //clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel, rd_sel
-ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel); 
+ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel); 
 
+pc pc1(clk, br_out[15:0], pc_sel, pc_write, pc_rst, pc_out[15:0]);
 
+im im1(pc_out[15:0], instr_in[31:0]);
+
+ir ir1(clk, ir_load, instr_in[31:0], instruction[31:0]);
+
+br br1(pc_out[15:0], instruction[15:0], br_sel, br_out[15:0]);
 
 initial
 
 /*Good one*/	$monitor($time,,"IR=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b,RD_SEL=%b, write_data=%b",
 instruction, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we,rb_sel, write_data);
-
+//$monitor("pc_sel=%b, pc_write=%b,ir_load=%b, pc_out=%b, br_sel= %b, imm=%h",pc_sel,pc_write,ir_load,pc_out[15:0],br_sel, instruction[15:0]); 
 
 /*Debug stat*/	/*$monitor("STAT=%b", stat_out);*/
 
