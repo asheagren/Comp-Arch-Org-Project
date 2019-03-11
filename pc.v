@@ -44,6 +44,7 @@ module pc (clk, br_addr, pc_sel, pc_write, pc_rst, pc_out);
     else
 
       if (pc_write == 1'b1)
+	//$display("PC writing");
  //$monitor("pc_out = %b",pc_out[15:0]);
         pc_out <= pc_in;
   end

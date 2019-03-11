@@ -2,7 +2,7 @@
 // finite state machine
 
 `timescale 1ns/100ps
-
+//mm is condition code
 module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel);
   /* TODO: Declare the ports listed above as inputs or outputs */
   input clk,rst_f;
@@ -97,124 +97,93 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			wb_sel <= 1'b0;
 			alu_op <= 2'b00;
 			//rb_sel <= 1'b0;
-			pc_write <= 1'b1;
+			pc_write <= 1'b1;	// Always increment the pc in fetch
 			ir_load <= 1'b1;
 			// ir_load <= 1'b0;
-			if (opcode == BNE) begin
-				$display("branch for 6");
-				
-				br_sel <= 1'b0;
-				//pc_sel <= 1'b1;
-			end
-				//5
-			else if(opcode == BRR) begin
-				$display("branch for 5");
-				
-				br_sel <= 1'b1;
-				//pc_sel <= 1'b1;
-			end
-				//7
-			else if(opcode == BNR) begin
-				$display("branch 7");
-				
-				br_sel <= 1'b1;
-				//pc_sel <= 1'b1;
-			end
-				//4
-			else if(opcode == BRA) begin
-				$display("branch 4");	
-						
-				br_sel <= 1'b0;
-				//pc_sel <= 1'b1;
-			end
-
-			else begin
-				$display("do not branch");
-				
-				//br_sel <= 1'b1;
-				//pc_sel <= 1'b0;
-			end
+			
 
 
 		end
 
 		decode: begin
-					//6
-
-			if (opcode == BNE) begin
-				$display("branch for 6");
-//				if (stat == 4'b0001) begin
-					//br_sel <= 1'b0;
+			ir_load <= 1'b0;
+			pc_write <= 1'b0;
+			// From Professor Maxted: only have pc_write be a 1 in decode if we branch.  In all other cases and states except fetch, pc_write should be a 0.
+			//6
+			$display("opcode=%h", opcode);
+			if (opcode == BNE ) begin
+				$display("BNE");
+				br_sel <= 1'b1;
+				if ((stat & mm) == 4'b0000) begin
+					$display("Took BNE branch");
 					pc_sel <= 1'b1;
-//				end
-//				else begin
-					//$display("break me off a piece of that do not branch");
-				
-					//br_sel <= 1'b1;
-//					pc_sel <= 1'b0;
-//				end
+					pc_write <= 1'b1;
+					
+				end
+				else begin
+					$display("Did not take BNE branch");
+					pc_sel <= 1'b1;
+					pc_write <= 1'b0;
+				end
 			end
 				//5
 			else if(opcode == BRR) begin
-				$display("break me off a piece of that branch for 5");
-//				if (stat == 4'b0001) begin
-					//br_sel <= 1'b1;
+				$display("BRR");
+				br_sel <= 1'b0;
+				if ((stat & mm) != 4'b0000) begin
+					$display("Took BRR branch");
 					pc_sel <= 1'b1;
-//				end
-//				else begin
-					//$display("break me off a piece of that do not branch");
-				
-					//br_sel <= 1'b1;
-//					pc_sel <= 1'b0;
-//				end
+					pc_write <= 1'b1;
+				end
+				else begin
+					$display("Did not take BRR branch");
+					pc_sel <= 1'b1;
+					pc_write <= 1'b0;
+				end
 			end
 				//7
 			else if(opcode == BNR) begin
-//				if (stat == 4'b0001) begin
-					$display("break me off a piece of that branch 7");
-					//br_sel <= 1'b1;
+				$display("BNR");
+				br_sel <= 1'b0;
+				if ((stat & mm) == 4'b0000) begin
+					$display("Took BNR branch");
 					pc_sel <= 1'b1;
-//				end
-//				else begin
-					//$display("break me off a piece of that do not branch");
-				
-					//br_sel <= 1'b1;
-//					pc_sel <= 1'b0;
-//				end
+					pc_write <= 1'b1;
+				end
+				else begin
+					$display("Did not take BNR branch");
+					pc_sel <= 1'b1;
+					pc_write <= 1'b1;
+				end
 			end
 				//4
 			else if(opcode == BRA) begin
-//				if (stat == 4'b0001) begin
-				$display("break me off a piece of that branch 4");	
-						
-				//br_sel <= 1'b0;
-				pc_sel <= 1'b1;
-//				end
-//				else begin
-					//$display("break me off a piece of that do not branch");
-				
-					//br_sel <= 1'b1;
-//					pc_sel <= 1'b0;
-//				end
+				$display("BRA");	
+				br_sel <= 1'b1;
+				if ((stat & mm) != 4'b0000) begin
+					$display("Took BRA branch");
+					pc_sel <= 1'b1;
+					pc_write <= 1'b1;
+				end
+				else begin
+					$display("Did not take BRA branch");
+					pc_sel <= 1'b1;
+					pc_write <= 1'b0;
+				end
 			end
 
 			else begin
-				$display("break me off a piece of that do not branch");
-				
-				//br_sel <= 1'b1;
+				$display("do not branch");
 				pc_sel <= 1'b0;
+				pc_write <= 1'b0;
 			end
-			ir_load <= 1'b0;
-			pc_write <= 1'b0;
+			
 
 
 		end
 
 		execute: begin
-				//6			5			7		
-
-
-			
+			pc_write <= 1'b0;
 			ir_load <= 1'b0;
 			
 
@@ -237,23 +206,12 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					alu_op <= 2'b10;
 				end
 			end
-
-			
-
-
-
-
-
-			
-
-
 		end
 		mem: begin
+			//pc_write <= 1'b0;
 			ir_load <= 1'b0;
 			rf_we <= 1'b1;
 		end
-	
-
 	endcase
 	
  end

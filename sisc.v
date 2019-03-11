@@ -70,8 +70,8 @@ br br1(pc_out[15:0], instruction[15:0], br_sel, br_out[15:0]);
 
 initial
 
-/*Good one*/$monitor($time,,"IR=%h, pc=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b,RD_SEL=%b, pc_sel=%h, br_sel=%h, write_data=%h",
-instruction, pc_out, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we,rb_sel, pc_sel, br_sel, write_data);
+/*Good one*/$monitor($time,,"IR=%h, pc=%h, R0=%h, R1=%h, R2=%h, R3=%h, R4=%h, R5=%h, ALU_OP=%h, WB_SEL=%b, RF_WE=%b,RD_SEL=%b, pc_sel=%h, br_sel=%h, pc_write=%b, write_data=%h",
+instruction, pc_out, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we,rb_sel, pc_sel, br_sel, pc_write, write_data);
 //$monitor("pc_sel=%b, pc_write=%b,ir_load=%b, pc_out=%b, br_sel= %b, imm=%h, stat_reg=%b, instruction=%h",pc_sel,pc_write,ir_load,pc_out[15:0],br_sel, instruction[15:0], stat_out, instruction); 
 
 /*Debug stat*/	/*$monitor("STAT=%b", stat_out);*/
