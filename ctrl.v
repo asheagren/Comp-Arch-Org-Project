@@ -70,7 +70,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				next_state <= writeback;
 			end
 			writeback: begin
-				next_state <= start1;
+				next_state <= fetch;
 			end
 		endcase
 		
@@ -82,24 +82,40 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
  always @ (posedge clk) begin
 	case(present_state) 
 		start0: begin
-			//pc_sel <= 1'b1;
+			rf_we <= 1'b0;
+			wb_sel <= 1'b0;
+			alu_op <= 2'b10;
+			rb_sel <= 1'b0;
+			pc_write <= 1'b0;	// Always increment the pc in fetch
+			ir_load <= 1'b0;
+			br_sel <= 1'b0;
+			pc_rst <= 1'b1;
+			pc_sel <= 1'b0;
 		end
 
 		start1: begin
-			//rb_sel <= 1'b0;
-			//ir_load <= 1'b1;
-			//ir_load <= 1'b0;
+			rf_we <= 1'b0;
+			wb_sel <= 1'b0;
+			alu_op <= 2'b00;
+			rb_sel <= 1'b0;
+			pc_write <= 1'b0;	// Always increment the pc in fetch
+			ir_load <= 1'b0;
 			br_sel <= 1'b0;
+			pc_rst <= 1'b0;
+			pc_sel <= 1'b0;
 		end
 
 		fetch: begin
 			rf_we <= 1'b0;
 			wb_sel <= 1'b0;
 			alu_op <= 2'b00;
-			//rb_sel <= 1'b0;
+			rb_sel <= 1'b0;
 			pc_write <= 1'b1;	// Always increment the pc in fetch
 			ir_load <= 1'b1;
-			// ir_load <= 1'b0;
+			br_sel <= 1'b0;
+			pc_rst <= 1'b0;
+			pc_sel <= 1'b0;
+			
 			
 
 
@@ -107,71 +123,73 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 
 		decode: begin
 			ir_load <= 1'b0;
-			pc_write <= 1'b0;
+			//pc_write <= 1'b0;
+			//pc_sel <= 1'b1;
 			// From Professor Maxted: only have pc_write be a 1 in decode if we branch.  In all other cases and states except fetch, pc_write should be a 0.
 			//6
 			$display("opcode=%h", opcode);
-			if (opcode == BNE ) begin
-				$display("BNE");
-				br_sel <= 1'b1;
-				if ((stat & mm) == 4'b0000) begin
-					$display("Took BNE branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b1;
-					
+			if ((opcode == BNE) || (opcode == BRA) || (opcode == BRR) || (opcode == BNR)) begin
+				if (opcode == BNE ) begin
+					$display("BNE");
+					br_sel <= 1'b1;
+					if ((stat & mm) == 4'b0000) begin
+						$display("Took BNE branch");
+						pc_sel <= 1'b1;
+						pc_write <= 1'b1;
+							
+					end
+					else begin
+						$display("Did not take BNE branch");
+						pc_sel <= 1'b0;
+						pc_write <= 1'b0;
+					end
 				end
-				else begin
-					$display("Did not take BNE branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b0;
+					//5
+				else if(opcode == BRR) begin
+					$display("BRR");
+					br_sel <= 1'b0;
+					if ((stat & mm) != 4'b0000) begin
+						$display("Took BRR branch");
+						pc_sel <= 1'b1;
+						pc_write <= 1'b1;
+					end
+					else begin
+						$display("Did not take BRR branch");
+						pc_sel <= 1'b0;
+						pc_write <= 1'b0;
+					end
+				end
+						//7
+				else if(opcode == BNR) begin
+					$display("BNR");
+					br_sel <= 1'b0;
+					if ((stat & mm) == 4'b0000) begin
+						$display("Took BNR branch");
+						pc_sel <= 1'b1;
+						pc_write <= 1'b1;
+					end
+					else begin
+						$display("Did not take BNR branch");
+						pc_sel <= 1'b0;
+						pc_write <= 1'b0;
+					end
+				end
+					//4
+				else if(opcode == BRA) begin
+					$display("BRA");	
+					br_sel <= 1'b1;
+					if ((stat & mm) != 4'b0000) begin
+						$display("Took BRA branch");
+						pc_sel <= 1'b1;
+						pc_write <= 1'b1;
+					end
+					else begin
+						$display("Did not take BRA branch");
+						pc_sel <= 1'b0;
+						pc_write <= 1'b0;
+					end
 				end
 			end
-				//5
-			else if(opcode == BRR) begin
-				$display("BRR");
-				br_sel <= 1'b0;
-				if ((stat & mm) != 4'b0000) begin
-					$display("Took BRR branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b1;
-				end
-				else begin
-					$display("Did not take BRR branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b0;
-				end
-			end
-				//7
-			else if(opcode == BNR) begin
-				$display("BNR");
-				br_sel <= 1'b0;
-				if ((stat & mm) == 4'b0000) begin
-					$display("Took BNR branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b1;
-				end
-				else begin
-					$display("Did not take BNR branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b1;
-				end
-			end
-				//4
-			else if(opcode == BRA) begin
-				$display("BRA");	
-				br_sel <= 1'b1;
-				if ((stat & mm) != 4'b0000) begin
-					$display("Took BRA branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b1;
-				end
-				else begin
-					$display("Did not take BRA branch");
-					pc_sel <= 1'b1;
-					pc_write <= 1'b0;
-				end
-			end
-
 			else begin
 				$display("do not branch");
 				pc_sel <= 1'b0;
@@ -188,7 +206,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			
 
 			if(mm == am_imm) begin
-				rb_sel <= 1'b1;
+				//rb_sel <= 1'b1;
 				if(opcode == ALU_OP) begin
 					alu_op <= 2'b01;
 				end
@@ -197,7 +215,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				end
 			end
 			else begin
-				rb_sel <= 1'b0;
+				//rb_sel <= 1'b0;
 
 				if(opcode == ALU_OP) begin
 					alu_op <= 2'b00;
@@ -209,8 +227,28 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 		mem: begin
 			//pc_write <= 1'b0;
+			//ir_load <= 1'b0;
+			//rf_we <= 1'b1;
+		end
+
+		writeback: begin
+			if(opcode == ALU_OP) begin
+				$display("Setting rf_we=1");				
+				rf_we = 1;
+			end
+			alu_op = 2'b10;
+		end
+
+		default: begin
+			rf_we <= 1'b0;
+			wb_sel <= 1'b0;
+			alu_op <= 2'b00;
+			rb_sel <= 1'b0;
+			pc_write <= 1'b0;	// Always increment the pc in fetch
 			ir_load <= 1'b0;
-			rf_we <= 1'b1;
+			br_sel <= 1'b0;
+			pc_rst <= 1'b1;
+			pc_sel <= 1'b0;
 		end
 	endcase
 	

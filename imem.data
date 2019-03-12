@@ -39,11 +39,6 @@
 80331002 //1A:     SUB  R3,R3,R1     R3 <- R3 - R1             Decrement R3
 7100FFFD //1B:     BNR  #1 L2        PC <- (PC+1) - 3          If R3 != 0, branch to L2
 60000016 //1C:     BNE  #0,L1        PC <- 0x0016 (uncond.)    Branch to L1
-00000000
-00000000
-00000000
-00000000
-00000000
 F0000000 //1D: L3: HALT                                        Halt program
 
 // At this point, registers should be as follows:
