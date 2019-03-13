@@ -6,8 +6,8 @@
 module sisc (clk, rst_f, instruction);
 
   input clk, rst_f;
-
-  input[31:0] instruction;
+input instruction; 
+  wire[31:0] instruction;
 
 
 // declare all internal wires here
