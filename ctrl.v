@@ -16,7 +16,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
   parameter start0 = 0, start1 = 1, fetch = 2, decode = 3, execute = 4, mem = 5, writeback = 6;
    
   // opcodes
-  parameter NOOP = 0, LOD = 1, STR = 2, SWP = 3, BRA = 4, BRR = 5, BNE = 6, BNR = 7, ALU_OP = 8, HLT=15;
+   parameter NOOP = 0, LOD = 1, STR = 2, SWP = 3, BRA = 4, BRR = 5, BNE = 6, BNR = 7, ALU_OP = 8, HLT=15;
 	
   // addressing modes
   parameter am_imm = 8;
@@ -79,14 +79,14 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
   /* TODO: Generate outputs based on the FSM states and inputs. For Parts 2, 3 and 4 you will
        add the new control signals here. */
    
- always @ (posedge clk) begin
+ always @ (posedge clk or opcode) begin
 	case(present_state) 
 		start0: begin
 			rf_we <= 1'b0;
 			wb_sel <= 1'b0;
 			alu_op <= 2'b10;
 			rb_sel <= 1'b0;
-			pc_write <= 1'b0;	// Always increment the pc in fetch
+			pc_write <= 1'b0;	
 			ir_load <= 1'b0;
 			br_sel <= 1'b0;
 			pc_rst <= 1'b1;
@@ -94,15 +94,9 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		start1: begin
-			rf_we <= 1'b0;
-			wb_sel <= 1'b0;
 			alu_op <= 2'b00;
-			rb_sel <= 1'b0;
-			pc_write <= 1'b0;	// Always increment the pc in fetch
 			ir_load <= 1'b0;
-			br_sel <= 1'b0;
 			pc_rst <= 1'b0;
-			pc_sel <= 1'b0;
 		end
 
 		fetch: begin
@@ -114,87 +108,54 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			ir_load <= 1'b1;
 			br_sel <= 1'b0;
 			pc_rst <= 1'b0;
-			pc_sel <= 1'b0;
-			
-			
+			pc_sel <= 1'b0;	
 		end
 
 		decode: begin
 			ir_load <= 1'b0;
-			//pc_write <= 1'b0;
-			//pc_sel <= 1'b1;
-			// From Professor Maxted: only have pc_write be a 1 in decode if we branch.  In all other cases and states except fetch, pc_write should be a 0.
-			//6
+			pc_write <= 1'b0;
 			
 			case(opcode) 
 				BNE: begin
-					//br_sel <= 1'b1;
-					br_sel <= 1'b0;
-					if((stat & mm) == 4'b0000) begin
+
+					pc_sel <= 1;
+					if((stat& mm) == 4'b0000) begin
 						$display("Took BNE branch");
-						pc_sel <= 1'b1;
-						pc_write <= 1'b1;
-					end
-					else begin
-						$display("Did not take BNE branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
+						pc_sel <= 1;
+						pc_write <= 1;
+						br_sel <= 1;
 					end
 				end
 				BRA: begin
-					//br_sel <= 1'b1;
-					br_sel <= 1'b0;
-					if ((stat & mm) == 4'b0000) begin
+					pc_sel <= 1;
+					if ((stat & mm) != 4'b0000) begin
 						$display("Took BRA branch");
-						pc_sel <= 1'b1;
-						pc_write <= 1'b1;
-					end
-					else begin
-						$display("Did not take BRA branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
+						pc_sel <= 1;
+						pc_write <= 1;
+						br_sel <= 1;
 					end
 				end
 				BRR: begin
-					//br_sel <= 1'b0;
-					br_sel <= 1'b1;
-					if ((stat & mm) == 4'b0000) begin
+
+					pc_sel <= 1;
+					if ((stat & mm) != 4'b0000) begin
+
 						$display("Took BRR branch");
-						pc_sel <= 1'b1;
-						pc_write <= 1'b1;
-					end
-					else begin
-						$display("Did not take BRR branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
+						pc_sel <= 1;
+						pc_write <= 1;
+						br_sel <= 0;
 					end
 				end
 				BNR: begin
-					//br_sel <= 1'b0;
-					br_sel <= 1'b1;
+					pc_sel <= 1;
 					if ((stat & mm) == 4'b0000) begin
 						$display("Took BNR branch");
-						pc_sel <= 1'b1;
-						pc_write <= 1'b1;
+						pc_sel <= 1;
+						pc_write <= 1;
+						br_sel <= 0;
 					end
-					else begin
-						$display("Did not take BNR branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
-					end
-				end
-				default: begin
-					br_sel <= 1'b0;
-					pc_sel <= 1'b0;
-					pc_write <= 1'b0;
-
 				end
 			endcase
-			
-			
-			
-
-
 		end
 
 		execute: begin
@@ -220,14 +181,26 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					
 				end
 			endcase
-
-
+	
+			if(mm == am_imm) begin
+				if(opcode == ALU_OP) begin
+					alu_op <= 2'b01;
+				end
+				else begin
+					alu_op <= 2'b11;
+				end
+			end
+			else begin
+				if(opcode == ALU_OP) begin
+					alu_op <= 2'b00;
+				end
+				else begin
+					alu_op <= 2'b10;
+				end
+			end
 		end
 
 		mem: begin
-			//pc_write <= 1'b0;
-			//ir_load <= 1'b0;
-			//rf_we <= 1'b1;
 		end
 
 		writeback: begin
@@ -235,25 +208,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				$display("Setting rf_we=1");				
 				rf_we = 1;
 			end
-			//alu_op = 2'b10;
-		end
-
-		default: begin
-			rf_we <= 1'b0;
-			wb_sel <= 1'b0;
-			alu_op <= 2'b00;
-			rb_sel <= 1'b0;
-			pc_write <= 1'b0;	// Always increment the pc in fetch
-			ir_load <= 1'b0;
-			br_sel <= 1'b0;
-			pc_rst <= 1'b1;
-			pc_sel <= 1'b0;
 		end
 	endcase
-	
  end
+
 // Halt on HLT instruction
-  
   always @ (opcode)
   begin
     if (opcode == HLT)
