@@ -102,7 +102,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			ir_load <= 1'b0;
 			//br_sel <= 1'b0;
 			pc_rst <= 1'b0;
-			//pc_sel <= 1'b0;
+			pc_sel <= 1'b0;
 		end
 
 		fetch: begin
@@ -114,7 +114,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			ir_load <= 1'b1;
 			//br_sel <= 1'b0;
 			pc_rst <= 1'b0;
-			//pc_sel <= 1'b0;
+			pc_sel <= 1'b0;
 			
 			
 		end
