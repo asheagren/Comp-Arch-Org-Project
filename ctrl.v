@@ -121,79 +121,46 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 
 		decode: begin
 			ir_load <= 1'b0;
-			//pc_write <= 1'b0;
+			pc_write <= 1'b0;
+			pc_sel <= 1'b0;
 			//pc_sel <= 1'b1;
 			// From Professor Maxted: only have pc_write be a 1 in decode if we branch.  In all other cases and states except fetch, pc_write should be a 0.
 			//6
 			
 			case(opcode) 
 				BNE: begin
-					//br_sel <= 1'b1;
-					br_sel <= 1'b0;
 					if((stat& mm) == 4'b0000) begin
 						$display("Took BNE branch");
 						pc_sel <= 1'b1;
 						pc_write <= 1'b1;
-					end
-					else begin
-						$display("Did not take BNE branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
+						br_sel <= 1'b0;
 					end
 				end
 				BRA: begin
-					br_sel <= 1'b1;
-					//br_sel <= 1'b0;
 					if ((stat & mm) == 4'b0000) begin
 						$display("Took BRA branch");
 						pc_sel <= 1'b1;
 						pc_write <= 1'b1;
-					end
-					else begin
-						$display("Did not take BRA branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
+						br_sel <= 1'b1;
 					end
 				end
 				BRR: begin
-					br_sel <= 1'b0;
-					//br_sel <= 1'b1;
 					if ((stat & mm) != 4'b0000) begin
 						$display("Took BRR branch");
 						pc_sel <= 1'b1;
 						pc_write <= 1'b1;
-					end
-					else begin
-						$display("Did not take BRR branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
+						br_sel <= 1'b0;
 					end
 				end
 				BNR: begin
-					//br_sel <= 1'b0;
-					br_sel <= 1'b1;
 					if ((stat & mm) == 4'b0000) begin
 						$display("Took BNR branch");
 						pc_sel <= 1'b1;
 						pc_write <= 1'b1;
+						br_sel <= 1'b1;
 					end
-					else begin
-						$display("Did not take BNR branch");
-						pc_sel <= 1'b0;
-						pc_write <= 1'b0;
-					end
-				end
-				default: begin
-					pc_sel <= 1'b0;
-					pc_write <= 1'b0;
-
 				end
 			endcase
-			
-			
-			
-
-
 		end
 
 		execute: begin
@@ -219,8 +186,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					
 				end
 			endcase
-
-/*			
+	
 			if(mm == am_imm) begin
 				//rb_sel <= 1'b1;
 				if(opcode == ALU_OP) begin
@@ -240,7 +206,6 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					alu_op <= 2'b10;
 				end
 			end
-			*/
 		end
 
 		mem: begin
@@ -254,7 +219,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				$display("Setting rf_we=1");				
 				rf_we = 1;
 			end
-			alu_op = 2'b10;
+			//alu_op = 2'b10;
 		end
 
 		default: begin
