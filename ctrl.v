@@ -3,12 +3,12 @@
 
 `timescale 1ns/100ps
 //mm is condition code
-module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel);
+module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we);
   /* TODO: Declare the ports listed above as inputs or outputs */
   input clk,rst_f;
   input[3:0] opcode, mm, stat;
   output reg[1:0] alu_op;
-  output reg wb_sel, rf_we, rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel;
+  output reg wb_sel, rf_we, rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we;
   
   reg wb_wire, rf_wire;
   
@@ -201,9 +201,40 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		mem: begin
+			
+			if (opcode == LOD) begin
+				case(mm) 
+					4'b1000:begin // ldx
+						$display("ldx");
+						mux_16_sel <= 0;
+						
+					end
+					4'b0000:begin // lda
+						$display("lda");
+						mux_16_sel <= 1;
+					end
+
+					default:begin
+					end
+				endcase
+			end
+			if (opcode == STR) begin
+				dm_we <= 1;
+				case(mm)
+					4'b1000:begin // stx	
+						$display("stx");
+						mux_16_sel <= 0;
+					end
+					4'b0000:begin // sta
+						$display("sta");
+						mux_16_sel <= 1;
+					end
+				endcase
+			end
 		end
 
 		writeback: begin
+			dm_we <= 0;
 			if(opcode == ALU_OP) begin
 				$display("Setting rf_we=1");				
 				rf_we = 1;
