@@ -233,7 +233,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			end
 		end
 
-		writeback: begin
+		writeback: begin //I cant believe you messed this up
 			dm_we <= 0;
 			if(opcode == ALU_OP) begin
 				$display("Setting rf_we=1");				
@@ -249,7 +249,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
     if (opcode == HLT)
     begin 
       #5 $display ("Halt."); //Delay 5 ns so $monitor will print the halt instruction
-      $stop;
+        $stop;
     end
   end
     
