@@ -39,6 +39,10 @@ wire ir_load;
 wire[31:0] instr_in;
 wire br_sel;
 wire[15:0] br_out;
+wire[15:0] read_addr;
+wire[15:0] write_addr;
+wire dm_we;
+wire[31:0] read_data;
 
 // component instantiation goes here
 
@@ -67,6 +71,8 @@ im im1(pc_out[15:0], instr_in[31:0]);
 ir ir1(clk, ir_load, instr_in[31:0], instruction[31:0]);
 
 br br1(pc_out[15:0], instruction[15:0], br_sel, br_out[15:0]);
+
+dm dm1(read_addr, write_addr, write_data, dm_we, read_data);
 
 initial
 
