@@ -97,6 +97,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			alu_op <= 2'b00;
 			ir_load <= 1'b0;
 			pc_rst <= 1'b0;
+			wb_sel <= 0;
 		end
 
 		fetch: begin
@@ -207,8 +208,14 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		mem: begin
-			
+			if(opcode == ALU_OP) begin // 1 when load
+				$display("Setting rf_we=1");				
+				rf_we = 1;
+			end
 			if (opcode == LOD) begin
+				wb_sel <= 1;
+				dm_we <= 0;
+				rf_we<=1;
 				case(mm) 
 					4'b1000:begin // ldx
 						$display("ldx");
@@ -225,6 +232,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				endcase
 			end
 			if (opcode == STR) begin
+				wb_sel <= 0;
 				dm_we <= 1;
 				case(mm)
 					4'b1000:begin // stx	
@@ -239,9 +247,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			end
 		end
 
-		writeback: begin //I cant believe you messed this up
+		writeback: begin
+			//rf_we <= 0;
 			dm_we <= 0;
-			if(opcode == ALU_OP) begin
+			//wb_sel <= 0;
+			if(opcode == LOD) begin // 1 when load
 				$display("Setting rf_we=1");				
 				rf_we = 1;
 			end
