@@ -42,12 +42,20 @@ module dm (read_addr, write_addr, write_data, dm_we, read_data);
   // byte addressable.
   always @(read_addr, dm_we)
   begin
+
+	$display("mem       ram_array[read_addr] = ", ram_array[read_addr]);
+	$display("mem	    read_addr = ", read_addr);
+	$display("mem	    write_data = ", write_data);
     read_data <= ram_array[read_addr];
+//$display(read_data);
   end
   
   // write process is sensitive to write enable
   always @(negedge dm_we)
   begin
+	$display("writeback ram_array[read_addr] = ", ram_array[read_addr]);
+	$display("writeback  read_addr = ", read_addr);
+	$display("writeback  write_data = ", write_data);
   	ram_array[write_addr] <= write_data;
   end
   
