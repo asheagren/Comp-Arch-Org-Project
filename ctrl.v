@@ -117,13 +117,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			
 			case(opcode) 
 				BNE: begin
-<<<<<<< HEAD
+
 					br_sel <= 1'b1;
 					//br_sel <= 1'b0;
-=======
 
 					pc_sel <= 1;
->>>>>>> af99d6b48380e4dda60abd065cb10820befbda51
 					if((stat& mm) == 4'b0000) begin
 						$display("Took BNE branch");
 						pc_sel <= 1;
@@ -141,13 +139,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					end
 				end
 				BRR: begin
-<<<<<<< HEAD
+
 					br_sel <= 1'b0;
 					//br_sel <= 1'b1;
-=======
 
 					pc_sel <= 1;
->>>>>>> af99d6b48380e4dda60abd065cb10820befbda51
 					if ((stat & mm) != 4'b0000) begin
 
 						$display("Took BRR branch");
@@ -249,14 +245,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				$display("Setting rf_we=1");				
 				rf_we = 1;
 			end
-<<<<<<< HEAD
+
 			//alu_op = 2'b10;
 		end
 
-		
-=======
-		end
->>>>>>> af99d6b48380e4dda60abd065cb10820befbda51
+
 	endcase
  end
 
