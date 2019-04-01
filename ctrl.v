@@ -112,7 +112,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			rb_sel <= 1'b0;
 			pc_write <= 1'b1;	// Always increment the pc in fetch
 			ir_load <= 1'b1;
-			//br_sel <= 1'b0;
+			br_sel <= 1'b0;
 			pc_rst <= 1'b0;
 			pc_sel <= 1'b0;
 			
@@ -128,8 +128,8 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			
 			case(opcode) 
 				BNE: begin
-					//br_sel <= 1'b1;
-					br_sel <= 1'b0;
+					br_sel <= 1'b1;
+					//br_sel <= 1'b0;
 					if((stat& mm) == 4'b0000) begin
 						$display("Took BNE branch");
 						pc_sel <= 1'b1;
@@ -156,8 +156,8 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					end
 				end
 				BRR: begin
-					//br_sel <= 1'b0;
-					br_sel <= 1'b1;
+					br_sel <= 1'b0;
+					//br_sel <= 1'b1;
 					if ((stat & mm) != 4'b0000) begin
 						$display("Took BRR branch");
 						pc_sel <= 1'b1;
@@ -238,17 +238,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			//alu_op = 2'b10;
 		end
 
-		default: begin
-			rf_we <= 1'b0;
-			wb_sel <= 1'b0;
-			alu_op <= 2'b00;
-			rb_sel <= 1'b0;
-			pc_write <= 1'b0;	// Always increment the pc in fetch
-			ir_load <= 1'b0;
-			br_sel <= 1'b0;
-			pc_rst <= 1'b1;
-			pc_sel <= 1'b0;
-		end
+		
 	endcase
 	
  end
