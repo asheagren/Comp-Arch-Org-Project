@@ -58,7 +58,7 @@ rf rf1(.clk(clk), .read_rega(instruction[19:16]), .read_regb(mux4_out), .write_r
 alu alu1(clk, rsa, rsb, instruction[15:0], alu_op, alu_result, cc, stat_en);
 
 //in_a, in_b, sel, out
-mux32 mux321(alu_result,zero_mux_32, wb_sel, write_data);
+mux32 mux321(alu_result, read_data, wb_sel, write_data);
 
 //clk, in, stat_en, out
 statreg statreg1(.clk(clk), .in(cc), .stat_en(stat_en), .out(stat_out));
@@ -74,9 +74,9 @@ ir ir1(clk, ir_load, instr_in[31:0], instruction[31:0]);
 
 br br1(pc_out[15:0], instruction[15:0], br_sel, br_out[15:0]);
 
-dm dm1(mux_16_out[15:0], mux_16_out[15:0], rsb[31:0], dm_we, read_data[31:0]);
+dm dm1(mux_16_out, mux_16_out, rsb, dm_we, read_data);
 
-mux16 mux161(.in_a(instruction[15:0]), .in_b(alu_result[15:0]), .sel(mux_16_sel), .out(mux_16_out[15:0]));
+mux16 mux161(.in_a(instruction[15:0]), .in_b(alu_result[15:0]), .sel(mux_16_sel), .out(mux_16_out));
 
 initial
 

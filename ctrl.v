@@ -94,7 +94,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		start1: begin
-			wb_sel <= 0;
+			//wb_sel <= 0;
 			alu_op <= 2'b00;
 			ir_load <= 1'b0;
 			pc_rst <= 1'b0;
@@ -115,14 +115,16 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		decode: begin
 			ir_load <= 1'b0;
 			pc_write <= 1'b0;
+
+
+
 			
 			case(opcode) 
 				BNE: begin
 
 					br_sel <= 1'b1;
-					
-
 					pc_sel <= 1;
+
 					if((stat& mm) == 4'b0000) begin
 						$display("Took BNE branch");
 						pc_sel <= 1;
@@ -170,53 +172,59 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			ir_load <= 1'b0;
 
 			if(mm == am_imm) begin
-				mux_16_sel <= 0;
+				
 				case(opcode)
 					ALU_OP: begin
 						alu_op <= 2'b01;
-						//dm_we <= 0;
+						dm_we <= 0;
 					end
 					STR: begin
 						alu_op <= 2'b11;
 						
-						//dm_we <= 1;
+						dm_we <= 1;
 					
 					end
 					LOD: begin
 						
 						alu_op <= 2'b11;
 						wb_sel = 1;
-						//dm_we <= 0;
+						dm_we <= 0;
+						
 						
 					end
 					default: begin
 						alu_op <= 2'b11;
-						//dm_we <= 0;
+						dm_we <= 0;
+						
 					end
 	
 				endcase
 			end
 			else begin
-				mux_16_sel <= 1;
+				
 				case(opcode)
 					ALU_OP: begin
 						alu_op <= 2'b00;
-						//dm_we <= 0;
+						dm_we <= 0;
+						
 					end
 					STR: begin
 						alu_op <= 2'b10;
-						//dm_we <= 1;
+
+						dm_we <= 1;						
 						
 					end
 					LOD: begin
 						alu_op <= 2'b10;
 						wb_sel = 1;
-						//dm_we <= 0;
+						dm_we <= 0;
+						
 						
 					end
 					default: begin
 						alu_op <= 2'b10;
-						//dm_we <= 0;
+						dm_we <= 0;
+						
 					end
 	
 				endcase
@@ -226,9 +234,22 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		mem: begin
 			
 			if (opcode == LOD) begin
+				if(mm == am_imm)begin
+					mux_16_sel <= 1;
+				end
+				else begin
+					mux_16_sel <= 0;
+				end
+
 				rf_we <= 1;
 			end
 			if (opcode == STR) begin
+				if(mm == am_imm)begin
+					mux_16_sel <= 1;
+				end
+				else begin
+					mux_16_sel <= 0;
+				end
 				dm_we <= 1;
 				
 			end
