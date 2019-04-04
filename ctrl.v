@@ -94,6 +94,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		start1: begin
+			wb_sel <= 0;
 			alu_op <= 2'b00;
 			ir_load <= 1'b0;
 			pc_rst <= 1'b0;
@@ -119,7 +120,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				BNE: begin
 
 					br_sel <= 1'b1;
-					//br_sel <= 1'b0;
+					
 
 					pc_sel <= 1;
 					if((stat& mm) == 4'b0000) begin
@@ -141,7 +142,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				BRR: begin
 
 					br_sel <= 1'b0;
-					//br_sel <= 1'b1;
+					
 
 					pc_sel <= 1;
 					if ((stat & mm) != 4'b0000) begin
@@ -168,94 +169,78 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			pc_write <= 1'b0;
 			ir_load <= 1'b0;
 
-			case(mm) 
-				am_imm:begin
-					if(opcode == ALU_OP) 
-						alu_op <= 2'b01;
-					
-					else
-						alu_op <= 2'b11;
-					
-				end
-
-				default:begin
-					if(opcode == ALU_OP) 
-						alu_op <= 2'b00;	
-					
-					else 
-						alu_op <= 2'b10;
-					
-				end
-			endcase
 			if(mm == am_imm) begin
-				if(opcode == ALU_OP) begin
-					alu_op <= 2'b01;
-				end
-				else begin
-					alu_op <= 2'b11;
-				end
+				mux_16_sel <= 0;
+				case(opcode)
+					ALU_OP: begin
+						alu_op <= 2'b01;
+						//dm_we <= 0;
+					end
+					STR: begin
+						alu_op <= 2'b11;
+						
+						//dm_we <= 1;
+					
+					end
+					LOD: begin
+						
+						alu_op <= 2'b11;
+						wb_sel = 1;
+						//dm_we <= 0;
+						
+					end
+					default: begin
+						alu_op <= 2'b11;
+						//dm_we <= 0;
+					end
+	
+				endcase
 			end
 			else begin
-				if(opcode == ALU_OP) begin
-					alu_op <= 2'b00;
-				end
-				else begin
-					alu_op <= 2'b10;
-				end
-			end
-			if(((opcode == LOD) || (opcode == STR)) && (mm == 4'b0000)) //load index and rs, or store into address specified by imm+rs
-			begin
-				alu_op <= 2'b01;
-				mux_16_sel <= 0;
-			end
-			else if(((opcode == LOD) || (opcode == STR)) && (mm == 4'b1000)) //load just index, or store into address specified by imm
-			begin
-				alu_op <= 2'b00;
 				mux_16_sel <= 1;
+				case(opcode)
+					ALU_OP: begin
+						alu_op <= 2'b00;
+						//dm_we <= 0;
+					end
+					STR: begin
+						alu_op <= 2'b10;
+						//dm_we <= 1;
+						
+					end
+					LOD: begin
+						alu_op <= 2'b10;
+						wb_sel = 1;
+						//dm_we <= 0;
+						
+					end
+					default: begin
+						alu_op <= 2'b10;
+						//dm_we <= 0;
+					end
+	
+				endcase
 			end
 		end
 
 		mem: begin
 			
 			if (opcode == LOD) begin
-				case(mm) 
-					4'b1000:begin // ldx
-						$display("ldx");
-						mux_16_sel <= 0;
-						
-					end
-					4'b0000:begin // lda
-						$display("lda");
-						mux_16_sel <= 1;
-					end
-
-					default:begin
-					end
-				endcase
+				rf_we <= 1;
 			end
 			if (opcode == STR) begin
 				dm_we <= 1;
-				case(mm)
-					4'b1000:begin // stx	
-						$display("stx");
-						mux_16_sel <= 0;
-					end
-					4'b0000:begin // sta
-						$display("sta");
-						mux_16_sel <= 1;
-					end
-				endcase
+				
 			end
 		end
 
 		writeback: begin //I cant believe you messed this up
 			dm_we <= 0;
-			if(opcode == ALU_OP) begin
+			if(opcode == ALU_OP || opcode == LOD) begin
 				$display("Setting rf_we=1");				
 				rf_we = 1;
 			end
 
-			//alu_op = 2'b10;
 		end
 
 
