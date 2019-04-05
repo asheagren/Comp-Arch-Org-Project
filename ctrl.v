@@ -117,7 +117,6 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			pc_write <= 1'b0;
 
 
-
 			
 			case(opcode) 
 				BNE: begin
@@ -163,6 +162,9 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						pc_write <= 1;
 						br_sel <= 0;
 					end
+				end
+				STR: begin
+					rb_sel <= 1;
 				end
 			endcase
 		end
