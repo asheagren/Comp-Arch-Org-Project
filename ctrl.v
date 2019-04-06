@@ -94,10 +94,10 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		start1: begin
+			//wb_sel <= 0;
 			alu_op <= 2'b00;
 			ir_load <= 1'b0;
 			pc_rst <= 1'b0;
-			wb_sel <= 0;
 		end
 
 		fetch: begin
@@ -115,11 +115,15 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		decode: begin
 			ir_load <= 1'b0;
 			pc_write <= 1'b0;
+
+
 			
 			case(opcode) 
 				BNE: begin
 
+					br_sel <= 1'b1;
 					pc_sel <= 1;
+
 					if((stat& mm) == 4'b0000) begin
 						$display("Took BNE branch");
 						pc_sel <= 1;
@@ -137,6 +141,9 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					end
 				end
 				BRR: begin
+
+					br_sel <= 1'b0;
+					
 
 					pc_sel <= 1;
 					if ((stat & mm) != 4'b0000) begin
@@ -156,117 +163,112 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						br_sel <= 0;
 					end
 				end
+				STR: begin
+					rb_sel <= 1;
+				end
 			endcase
 		end
 
 		execute: begin
 			pc_write <= 1'b0;
 			ir_load <= 1'b0;
-/*
-			//case(opcode)
-				//ALU_OP:begin
-					if(mm == am_imm)
-						alu_op <= 2'b01;
-					else
-						alu_op <= 2'b00;
-				end
-				LOD:begin
-					if(mm == am_imm)begin
-						alu_op <= 
-				end
-				STR:begin
 
-				end
-				
-			endcase
-*/
-			case(mm) 
-				am_imm:begin
-					if(opcode == ALU_OP) 
-						alu_op <= 2'b01;
-					
-					else
-						alu_op <= 2'b11;
-					
-				end
 
-				default:begin
-					if(opcode == ALU_OP) 
-						alu_op <= 2'b00;	
-					
-					else 
-						alu_op <= 2'b10;
-					
-				end
-			endcase
-	
 			if(mm == am_imm) begin
-				if(opcode == ALU_OP) begin
-					alu_op <= 2'b01;
-				end
-				else begin
-					alu_op <= 2'b11;
-				end
+				
+				case(opcode)
+					ALU_OP: begin
+
+						alu_op <= 2'b01;
+						dm_we <= 0;
+					end
+					STR: begin
+						alu_op <= 2'b11;
+						
+						dm_we <= 1;
+					
+					end
+					LOD: begin
+						
+						alu_op <= 2'b11;
+						wb_sel = 1;
+						dm_we <= 0;
+						
+						
+					end
+					default: begin
+						alu_op <= 2'b11;
+						dm_we <= 0;
+						
+					end
+	
+				endcase
 			end
 			else begin
-				if(opcode == ALU_OP) begin
-					alu_op <= 2'b00;
-				end
-				else begin
-					alu_op <= 2'b10;
-				end
+				
+				case(opcode)
+					ALU_OP: begin
+						alu_op <= 2'b00;
+						dm_we <= 0;
+						
+					end
+					STR: begin
+						alu_op <= 2'b10;
+
+						dm_we <= 1;						
+						
+					end
+					LOD: begin
+						alu_op <= 2'b10;
+						wb_sel = 1;
+						dm_we <= 0;
+						
+						
+					end
+					default: begin
+						alu_op <= 2'b10;
+						dm_we <= 0;
+						
+					end
+	
+				endcase
 			end
 		end
 
 		mem: begin
-			if(opcode == ALU_OP) begin // 1 when load
-				$display("Setting rf_we=1");				
-				rf_we = 1;
-			end
+			
 			if (opcode == LOD) begin
-				wb_sel <= 1;
-				dm_we <= 0;
-				rf_we<=1;
-				case(mm) 
-					4'b1000:begin // ldx
-						$display("ldx");
-						mux_16_sel <= 0;
-						
-					end
-					4'b0000:begin // lda
-						$display("lda");
-						mux_16_sel <= 1;
-					end
+				if(mm == am_imm)begin
+					mux_16_sel <= 1;
+				end
+				else begin
+					mux_16_sel <= 0;
+				end
 
-					default:begin
-					end
-				endcase
+				rf_we <= 1;
 			end
 			if (opcode == STR) begin
-				wb_sel <= 0;
+				if(mm == am_imm)begin
+					mux_16_sel <= 1;
+				end
+				else begin
+					mux_16_sel <= 0;
+				end
 				dm_we <= 1;
-				case(mm)
-					4'b1000:begin // stx	
-						$display("stx");
-						mux_16_sel <= 0;
-					end
-					4'b0000:begin // sta
-						$display("sta");
-						mux_16_sel <= 1;
-					end
-				endcase
+				
 			end
 		end
 
-		writeback: begin
-			//rf_we <= 0;
+		writeback: begin //I cant believe you messed this up
 			dm_we <= 0;
-			//wb_sel <= 0;
-			if(opcode == LOD) begin // 1 when load
+			if(opcode == ALU_OP || opcode == LOD) begin
 				$display("Setting rf_we=1");				
 				rf_we = 1;
 			end
+
 		end
+
+
 	endcase
  end
 
