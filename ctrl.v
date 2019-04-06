@@ -162,7 +162,24 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		execute: begin
 			pc_write <= 1'b0;
 			ir_load <= 1'b0;
+/*
+			//case(opcode)
+				//ALU_OP:begin
+					if(mm == am_imm)
+						alu_op <= 2'b01;
+					else
+						alu_op <= 2'b00;
+				end
+				LOD:begin
+					if(mm == am_imm)begin
+						alu_op <= 
+				end
+				STR:begin
 
+				end
+				
+			endcase
+*/
 			case(mm) 
 				am_imm:begin
 					if(opcode == ALU_OP) 
