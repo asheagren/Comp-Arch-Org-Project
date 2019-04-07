@@ -3,7 +3,7 @@
 
 `timescale 1ns/100ps
 
-module mux32 (in_a, in_b, swap_a, swap_b, sel, out);
+module mux32 (swap_ctrl,in_a, in_b, swap_a, swap_b, sel, out);
 
   /*
    *  32-BIT MULTIPLEXER - mux32.v
@@ -17,18 +17,27 @@ module mux32 (in_a, in_b, swap_a, swap_b, sel, out);
    *   - out (32 bits): Multiplexer output.
    *
    */
-
+  input swap_ctrl;
   input  [31:0] in_a;
   input  [31:0] in_b;
   input  [31:0] swap_a;
   input  [31:0] swap_b;
   input  [1:0]  sel;
   output [31:0] out;
-
+  reg [31:0] regA_value;
+  reg [31:0] regB_value;
   reg   [31:0] outreg;
+
+  always@(posedge swap_ctrl) begin
+	regA_value = swap_a;
+	regB_value = swap_b;
+
+  end
    
-  always @ (in_a, in_b, swap_a, swap_b, sel)
+  always @ (in_a, in_b, sel)
   begin
+	$display("regA_value =", regA_value);
+	$display("regB_value =", regB_value);
     case (sel)
 	0: begin
 		outreg = in_a;
@@ -37,10 +46,10 @@ module mux32 (in_a, in_b, swap_a, swap_b, sel, out);
 		outreg = in_b;
 	end
 	2: begin
-		outreg = swap_a;
+		outreg = regA_value;
 	end
 	3: begin
-		outreg = swap_b;
+		outreg = regB_value;
 	end
     endcase
   end

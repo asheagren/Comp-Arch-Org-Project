@@ -3,12 +3,12 @@
 
 `timescale 1ns/100ps
 //mm is condition code
-module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, mux4_swap_sel);
+module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, mux4_swap_sel,swap_ctrl);
   /* TODO: Declare the ports listed above as inputs or outputs */
   input clk,rst_f;
   input[3:0] opcode, mm, stat;
   output reg[1:0] alu_op, wb_sel;
-  output reg rf_we, rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, mux4_swap_sel;
+  output reg rf_we, rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, mux4_swap_sel, swap_ctrl;
 
   
   reg wb_wire, rf_wire;
@@ -83,6 +83,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
  always @ (posedge clk or opcode) begin
 	case(present_state) 
 		start0: begin
+			swap_ctrl <= 0;
 			rf_we <= 1'b0;
 			wb_sel <= 0;
 			alu_op <= 2'b10;
@@ -104,6 +105,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		fetch: begin
+			swap_ctrl <= 0;
 			rf_we <= 1'b0;
 			wb_sel <= 0;
 			alu_op <= 2'b00;
@@ -171,6 +173,8 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				end
 				SWP: begin
 					rb_sel <= 1;
+					//swap_ctrl <= 1;
+					
 				end
 			endcase
 		end
@@ -178,7 +182,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		execute: begin
 			pc_write <= 1'b0;
 			ir_load <= 1'b0;
-
+			
 
 			if(mm == am_imm) begin
 				
@@ -198,11 +202,10 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						wb_sel = 1;
 						dm_we <= 0;
 					end
-					SWP: begin						
-						alu_op <= 2'b11;
-						dm_we <= 1;
-						mux4_swap_sel <= 1;
-						//mux_16_sel <= 1;
+					SWP: begin	
+						swap_ctrl <= 1;					
+						wb_sel <= 2;
+
 					end
 					default: begin
 						alu_op <= 2'b11;
@@ -223,10 +226,8 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						dm_we <= 1;						
 					end
 					SWP: begin
-						alu_op <= 2'b10;
-						dm_we <= 1;
-						mux4_swap_sel <= 1;
-						//mux_16_sel <= 1;
+						swap_ctrl <= 1;
+						wb_sel <= 2;
 					end
 					LOD: begin
 						alu_op <= 2'b10;
@@ -243,6 +244,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		mem: begin
+			swap_ctrl <= 0;
 			case (opcode)
 				LOD: begin
 					if(mm == am_imm)begin
@@ -264,25 +266,29 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					dm_we <= 1;
 				end
 				SWP: begin
-					if(mm == am_imm) begin
-						mux_16_sel <= 1;
-					end
-					else begin
-						mux_16_sel <= 0;
-					end
-					dm_we <= 1;
-					wb_sel <= 2;
-					rf_we <= 1;
+					rf_we = 1;
+					//mux4_swap_sel = 1;
+					
 				end		
 			endcase
 		end
 
 		writeback: begin //I cant believe you messed this up
+			rf_we = 0;
 			dm_we <= 0;
-			if(opcode == ALU_OP || opcode == LOD) begin
-				$display("Setting rf_we=1");				
-				rf_we = 1;
-			end
+			case(opcode) 
+				ALU_OP: begin
+					rf_we = 1;
+				end
+				LOD: begin
+					rf_we = 1;
+				end
+				SWP: begin
+					wb_sel = 3;
+					mux4_swap_sel = 1;
+					rf_we = 1;
+				end
+			endcase 
 
 		end
 

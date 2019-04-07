@@ -49,28 +49,28 @@ wire[31:0] swap_a;
 wire[31:0] swap_b;
 wire swap_sel;
 wire[3:0] mux4_swap_out;
-
+wire swap_ctrl;
 // component instantiation goes here
 
 //in_a, in_b, sel--could be rb_sel, out
-mux4 mux41(.in_a(instruction[15:12]),.in_b(mux4_swap_out), .sel(rb_sel), .out(mux4_out));
+mux4 mux41(.in_a(instruction[15:12]),.in_b(instruction[23:20]), .sel(rb_sel), .out(mux4_out));
 
 mux4 mux4_swap(.in_a(instruction[23:20]), .in_b(instruction[19:16]), .sel(swap_sel), .out(mux4_swap_out));
 
 //clk, read_rega, read_regb, write_reg, write_data, rf_we, rsa, rsb
-rf rf1(.clk(clk), .read_rega(instruction[19:16]), .read_regb(mux4_out), .write_reg(instruction[23:20]), .write_data(write_data), .rf_we(rf_we), .rsa(rsa), .rsb(rsb));
+rf rf1(.clk(clk), .read_rega(instruction[19:16]), .read_regb(mux4_out), .write_reg(mux4_swap_out), .write_data(write_data), .rf_we(rf_we), .rsa(rsa), .rsb(rsb));
 
 //clk, rsa, rsb, imm, alu_op, alu_result, stat, stat_en
 alu alu1(clk, rsa, rsb, instruction[15:0], alu_op, alu_result, cc, stat_en);
 
 //in_a, in_b, sel, out
-mux32 mux321(alu_result, read_data, swap_a, swap_b, wb_sel, write_data);
+mux32 mux321(swap_ctrl, alu_result, read_data, rsa, rsb, wb_sel, write_data);
 
 //clk, in, stat_en, out
 statreg statreg1(.clk(clk), .in(cc), .stat_en(stat_en), .out(stat_out));
 
 //clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel, rd_sel
-ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, swap_sel); 
+ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, swap_sel, swap_ctrl); 
 
 pc pc1(clk, br_out[15:0], pc_sel, pc_write, pc_rst, pc_out[15:0]);
 
