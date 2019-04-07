@@ -18,7 +18,7 @@ wire enable;
 wire[3:0] stat_out;
 wire[31:0] zero_mux_32 = 32'h00000000;
 wire zero_mux_4 = 4'b0000;
-wire wb_sel;
+wire[1:0] wb_sel;
 wire[31:0] write_data;
 wire[3:0] read_regb;
 wire rf_we;
@@ -45,11 +45,17 @@ wire[31:0] read_data;
 wire mux_16_sel;
 wire mux_16_in_a;
 wire mux_16_in_b;
+wire[31:0] swap_a;
+wire[31:0] swap_b;
+wire swap_sel;
+wire[3:0] mux4_swap_out;
 
 // component instantiation goes here
 
 //in_a, in_b, sel--could be rb_sel, out
-mux4 mux41(.in_a(instruction[15:12]),.in_b(instruction[23:20]), .sel(rb_sel), .out(mux4_out));
+mux4 mux41(.in_a(instruction[15:12]),.in_b(mux4_swap_out), .sel(rb_sel), .out(mux4_out));
+
+mux4 mux4_swap(.in_a(instruction[23:20]), .in_b(instruction[19:16]), .sel(swap_sel), .out(mux4_swap_out));
 
 //clk, read_rega, read_regb, write_reg, write_data, rf_we, rsa, rsb
 rf rf1(.clk(clk), .read_rega(instruction[19:16]), .read_regb(mux4_out), .write_reg(instruction[23:20]), .write_data(write_data), .rf_we(rf_we), .rsa(rsa), .rsb(rsb));
@@ -58,13 +64,13 @@ rf rf1(.clk(clk), .read_rega(instruction[19:16]), .read_regb(mux4_out), .write_r
 alu alu1(clk, rsa, rsb, instruction[15:0], alu_op, alu_result, cc, stat_en);
 
 //in_a, in_b, sel, out
-mux32 mux321(alu_result, read_data, wb_sel, write_data);
+mux32 mux321(alu_result, read_data, swap_a, swap_b, wb_sel, write_data);
 
 //clk, in, stat_en, out
 statreg statreg1(.clk(clk), .in(cc), .stat_en(stat_en), .out(stat_out));
 
 //clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel, rd_sel
-ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we); 
+ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, swap_sel); 
 
 pc pc1(clk, br_out[15:0], pc_sel, pc_write, pc_rst, pc_out[15:0]);
 
@@ -77,6 +83,8 @@ br br1(pc_out[15:0], instruction[15:0], br_sel, br_out[15:0]);
 dm dm1(mux_16_out, mux_16_out, rsb, dm_we, read_data);
 
 mux16 mux161(.in_a(instruction[15:0]), .in_b(alu_result[15:0]), .sel(mux_16_sel), .out(mux_16_out));
+
+
 
 initial
 

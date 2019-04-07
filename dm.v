@@ -45,6 +45,8 @@ module dm (read_addr, write_addr, write_data, dm_we, read_data);
 
 	$display("mem       ram_array[8] = ", ram_array[8]);
 	$display("mem       ram_array[9] = ", ram_array[9]);
+	$display("mem       ram_array[1] = ", ram_array[1]);
+	
 	
 	
     read_data <= ram_array[read_addr];

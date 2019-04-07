@@ -65,13 +65,15 @@
 10200009 //22:     LDA  R2,#0009     R2 <- M(0009)                       R2 = FF000019
 8830FFF8 //23:     ADI  R3,R0,-8     R3 <- R0 + 0x(FFFF)FFF8             Set R3 = -8
 18330010 //24:     LDX  R3,R3,16     R3 <- M(R3+0010)                    R3 = 00000006
-F0000000 //25:     HLT                                                   Halt program
 
 // At this point, registers should be as follows:
 //   R1: 00000001		R4: 00000006
 //   R2: FF000019		R5: FF000019
 //   R3: 00000006		R0, R6-R15: 00000000
 //   M[8]: 00000006		M[9]: FF000019
+
+30230001
+F0000000 //25:     HLT                                                   Halt program
 
 
 

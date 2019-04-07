@@ -3,12 +3,13 @@
 
 `timescale 1ns/100ps
 //mm is condition code
-module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we);
+module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, mux4_swap_sel);
   /* TODO: Declare the ports listed above as inputs or outputs */
   input clk,rst_f;
   input[3:0] opcode, mm, stat;
-  output reg[1:0] alu_op;
-  output reg wb_sel, rf_we, rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we;
+  output reg[1:0] alu_op, wb_sel;
+  output reg rf_we, rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, mux4_swap_sel;
+
   
   reg wb_wire, rf_wire;
   
@@ -83,7 +84,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 	case(present_state) 
 		start0: begin
 			rf_we <= 1'b0;
-			wb_sel <= 1'b0;
+			wb_sel <= 0;
 			alu_op <= 2'b10;
 			rb_sel <= 1'b0;
 			pc_write <= 1'b0;	
@@ -91,6 +92,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			br_sel <= 1'b0;
 			pc_rst <= 1'b1;
 			pc_sel <= 1'b0;
+			mux4_swap_sel <= 0;
 		end
 
 		start1: begin
@@ -98,11 +100,12 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			alu_op <= 2'b00;
 			ir_load <= 1'b0;
 			pc_rst <= 1'b0;
+			mux4_swap_sel <= 0;
 		end
 
 		fetch: begin
 			rf_we <= 1'b0;
-			wb_sel <= 1'b0;
+			wb_sel <= 0;
 			alu_op <= 2'b00;
 			rb_sel <= 1'b0;
 			pc_write <= 1'b1;	// Always increment the pc in fetch
@@ -166,6 +169,9 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				STR: begin
 					rb_sel <= 1;
 				end
+				SWP: begin
+					rb_sel <= 1;
+				end
 			endcase
 		end
 
@@ -182,24 +188,25 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					end
 					STR: begin
 						alu_op <= 2'b11;
-						
 						dm_we <= 1;
-					
 					end
 					LOD: begin
 						
 						alu_op <= 2'b11;
 						wb_sel = 1;
 						dm_we <= 0;
-						
-						
+					end
+					SWP: begin						
+						alu_op <= 2'b11;
+						dm_we <= 1;
+						mux4_swap_sel <= 1;
+						//mux_16_sel <= 1;
 					end
 					default: begin
 						alu_op <= 2'b11;
 						dm_we <= 0;
 						
 					end
-	
 				endcase
 			end
 			else begin
@@ -208,25 +215,25 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					ALU_OP: begin
 						alu_op <= 2'b00;
 						dm_we <= 0;
-						
 					end
 					STR: begin
 						alu_op <= 2'b10;
-
 						dm_we <= 1;						
-						
+					end
+					SWP: begin
+						alu_op <= 2'b10;
+						dm_we <= 1;
+						mux4_swap_sel <= 1;
+						//mux_16_sel <= 1;
 					end
 					LOD: begin
 						alu_op <= 2'b10;
 						wb_sel = 1;
-						dm_we <= 0;
-						
-						
+						dm_we <= 0;						
 					end
 					default: begin
 						alu_op <= 2'b10;
 						dm_we <= 0;
-						
 					end
 	
 				endcase
@@ -234,27 +241,38 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		mem: begin
-			
-			if (opcode == LOD) begin
-				if(mm == am_imm)begin
-					mux_16_sel <= 1;
+			case (opcode)
+				LOD: begin
+					if(mm == am_imm)begin
+						mux_16_sel <= 1;
+					end
+					else begin
+						mux_16_sel <= 0;
+					end
+	
+					rf_we <= 1;
 				end
-				else begin
-					mux_16_sel <= 0;
+				STR: begin
+					if(mm == am_imm) begin
+						mux_16_sel <= 1;
+					end
+					else begin
+						mux_16_sel <= 0;
+					end
+					dm_we <= 1;
 				end
-
-				rf_we <= 1;
-			end
-			if (opcode == STR) begin
-				if(mm == am_imm)begin
-					mux_16_sel <= 1;
-				end
-				else begin
-					mux_16_sel <= 0;
-				end
-				dm_we <= 1;
-				
-			end
+				SWP: begin
+					if(mm == am_imm) begin
+						mux_16_sel <= 1;
+					end
+					else begin
+						mux_16_sel <= 0;
+					end
+					dm_we <= 1;
+					wb_sel <= 2;
+					rf_we <= 1;
+				end		
+			endcase
 		end
 
 		writeback: begin //I cant believe you messed this up
