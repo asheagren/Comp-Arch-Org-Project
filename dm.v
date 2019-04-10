@@ -34,7 +34,9 @@ module dm (read_addr, write_addr, write_data, dm_we, read_data);
  
   // load data
   initial begin : prog_load
-    $readmemh("datamemory.data",ram_array);
+    	//$readmemh("datamemory.data",ram_array);
+	$readmemh("mult_data.data",ram_array);
+	//$readmemh("sort_data.data", ram_array);
   end
 
   // read process is sensitive to read address.
@@ -43,22 +45,19 @@ module dm (read_addr, write_addr, write_data, dm_we, read_data);
   always @(read_addr, dm_we)
   begin
 
-	$display("mem       ram_array[8] = ", ram_array[8]);
-	$display("mem       ram_array[9] = ", ram_array[9]);
+	$display("mem       ram_array[0] = ", ram_array[0]);
 	$display("mem       ram_array[1] = ", ram_array[1]);
+	$display("mem       ram_array[2] = ", ram_array[2]);
+	$display("mem       ram_array[3] = ", ram_array[3]);
 	
 	
 	
     read_data <= ram_array[read_addr];
-//$display(read_data);
   end
   
   // write process is sensitive to write enable
   always @(negedge dm_we)
   begin
-	$display("writeback ram_array[read_addr] = ", ram_array[read_addr]);
-	$display("writeback  read_addr = ", read_addr);
-	$display("writeback  write_data = ", write_data);
   	ram_array[write_addr] <= write_data;
   end
   

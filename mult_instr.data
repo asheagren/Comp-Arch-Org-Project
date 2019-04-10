@@ -1,0 +1,33 @@
+// ECE:3350 sisc processor project
+// This program tests arithmetic instructions from Part 1.
+// These are the same instructions in sisc_tb_p1.v
+
+
+00000000	//00:
+
+10100000	//01: LDA R1, #0000
+10200001	//02: LDA R2, #0001
+80420000	//03: ADD R4, R2, R0
+88600001	//04: ADI R6, R0, 1
+80646006	//05: AND R6, R4, R6
+88500001	//06: ADI R6, R0, 1
+80665002	//07: SUB R6, R6, R5
+4200000A	//08: BNR PCC++2 	If R6 < 0, PC++1
+80331001	//09: ADD R3, R3, R1
+88600001	//0A: ADI R6, R0, 1
+8044600A	//0B: SHR R4, R4, R6
+8033600A	//0C: SHR R3, R3, R1
+
+/*
+80414000	// L0: ADD R4, R1, R4 
+8822FFFF	// ADI R2, R2, -1
+7100FFFD	// PC <- (PC+1)-3
+20400003	// STA R4, #0003
+20300002	// STA R3, #0002
+*/
+
+F0000000 //25:     HLT                                                   Halt program
+
+
+
+

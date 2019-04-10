@@ -87,7 +87,6 @@ module alu (clk, rsa, rsb, imm, alu_op, alu_result, stat, stat_en);
 
   // adder
   always @ (rsa, rsb, funct, imm_ext, alu_op) begin
-	$display("rsb = ", rsb);
     if (alu_op[0] == 1'b0)
       if (funct == sub)
         add_out <= rsa - rsb;
