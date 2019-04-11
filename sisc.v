@@ -92,6 +92,6 @@ initial
 instruction, pc_out, rf1.ram_array[0], rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[5], alu_op, wb_sel, rf_we,rb_sel, pc_sel, br_sel, pc_write, write_data);
 //$monitor("pc_sel=%b, pc_write=%b,ir_load=%b, pc_out=%b, br_sel= %b, imm=%h, stat_reg=%b, instruction=%h",pc_sel,pc_write,ir_load,pc_out[15:0],br_sel, instruction[15:0], stat_out, instruction); */
 
-/*Good one*/$monitor($time,,"IR=%h, pc=%h, R1=%b, R2=%b, R3=%b, R4=%b, R6=%b",
-instruction, pc_out, rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[6]);
+/*Good one*/$monitor($time,,"IR=%h, pc=%h, R1=%b, R2=%b, R3=%b, R4=%b, RA=%b, RB=%b",
+instruction, pc_out, rf1.ram_array[1], rf1.ram_array[2], rf1.ram_array[3], rf1.ram_array[4], rf1.ram_array[10], rf1.ram_array[11]);
 endmodule
