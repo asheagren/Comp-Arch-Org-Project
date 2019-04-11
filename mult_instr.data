@@ -8,7 +8,6 @@
 // R8 is the counter
 // R9 is the number of shift lefts we need to put a 1 at the msb of R7 (for carrying)
 // RA is the carry from R3 to R4
-// 
 
 00000000	//00:
 10100000	//01: LDA R1, #0000
@@ -49,11 +48,8 @@
 
 20300002	//20: STA R3, #0002
 20400003	//21: STA R4, #0003
-		//22:
-F0000000 //25:     HLT                                                   Halt program
+F0000000 	//22: HLT                                                   Halt program
 
-
-// Now I need to carry over the lsb from R3 to R4
 
 
 
