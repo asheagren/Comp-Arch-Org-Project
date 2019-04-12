@@ -94,9 +94,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			pc_rst <= 1'b1;
 			pc_sel <= 1'b0;
 			mux4_swap_sel <= 0;
+			dm_we <= 0;
 		end
 
 		start1: begin
+			dm_we <= 0;
 			//wb_sel <= 0;
 			alu_op <= 2'b00;
 			ir_load <= 1'b0;

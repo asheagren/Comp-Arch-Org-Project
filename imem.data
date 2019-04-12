@@ -35,8 +35,8 @@
 // ECE:3350 sisc processor project part 2
 // This section tests branch instructions with two nested loops
 
-80400001 //12:     ADD  R4,R0,R0     R4 <- R0 + R1             Clear R4
-6100001D //13:     BNE  #1,L3        PC <- 0x001D              If R4 !< 0, branch to L3
+80400001 //12:     ADD  R4,R0,R0     R4 <- R0 + R0             Clear R4
+6100001D //13:     BNE  #1,L3        PC <- 0x001D              If R4 != 0, branch to L3
 88100001 //14:     ADI  R1,R0,1      R1 <- R0 + 0x(0000)0001   Set R1 = 1
 88200004 //15:     ADI  R2,R0,4      R2 <- R0 + 0x(0000)0004   Set R2 = 4
 8822FFFF //16: L1: ADI  R2,R2,-1     R2 <- R2 - 1              Decrement R2

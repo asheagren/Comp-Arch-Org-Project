@@ -43,10 +43,15 @@ module dm (read_addr, write_addr, write_data, dm_we, read_data);
   always @(read_addr, dm_we)
   begin
 
-	$display("mem       ram_array[8] = ", ram_array[8]);
-	$display("mem       ram_array[9] = ", ram_array[9]);
+	$display("mem       ram_array[0] = ", ram_array[0]);
 	$display("mem       ram_array[1] = ", ram_array[1]);
-	
+	$display("mem       ram_array[2] = ", ram_array[2]);
+	$display("mem       ram_array[3] = ", ram_array[3]);
+	$display("mem       ram_array[4] = ", ram_array[4]);
+	$display("mem       ram_array[5] = ", ram_array[5]);
+	$display("mem       ram_array[6] = ", ram_array[6]);
+	$display("mem       ram_array[7] = ", ram_array[7]);
+	$display("mem       ram_array[8] = ", ram_array[8]);	
 	
 	
     read_data <= ram_array[read_addr];
