@@ -31,9 +31,10 @@ module statreg (clk, in, stat_en, out);
     outreg = 4'b0000;
    
   always @ (posedge clk)
-    if (stat_en == 1'b1)
+    if (stat_en == 1'b1)begin
       outreg = in;
-
+	$display("SREG= %b", outreg);
+	end
   assign out = outreg;
 
 endmodule 

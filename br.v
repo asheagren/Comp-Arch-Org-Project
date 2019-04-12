@@ -35,11 +35,9 @@ module br (pc_inc, imm, br_sel, br_addr);
   always @ (pc_inc, br_sel)
   begin
     if (br_sel == 1'b1)begin
-	//$monitor("we in here br_sel==1");
       br_in <= 16'h0000;
     end 
     else begin
-      //$monitor("we in here br_sel==0");
       br_in <= pc_inc;
     end
   end

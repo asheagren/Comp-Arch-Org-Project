@@ -1,0 +1,56 @@
+// ECE:3350 sisc processor project
+// This program tests arithmetic instructions from Part 1.
+// These are the same instructions in sisc_tb_p1.v
+
+
+// R5 is 0000000000000001
+// R7 is carry
+// R8 is the counter
+// R9 is the number of shift lefts we need to put a 1 at the msb of R7 (for carrying)
+// RA is the carry from R3 to R4
+
+00000000	//00:
+10100000	//01: LDA R1, #0000
+10200001	//02: LDA R2, #0001
+88800020	//03: ADI R8, R0, 2 // How many times we loop
+80420000	//04: ADD R4, R2, R0
+
+// Loop through 32 times
+8890001F	//0D: ADI R9, R0, 001F
+88600001	//05: ADI R6, R0, 1
+80646006	//06: AND R6, R4, R6
+88500001	//07: ADI R5, R0, 1
+80665002	//08: SUB R6, R6, R5
+4200000F	//09: BRA PCC++2 to ADI R6 	If R6 < 0, PC++1
+80331001	//0A: ADD R3, R3, R1
+6800000F	//0B: BNE to ADI R6 if we don't have a carry
+88700001	//0C: ADI R7, R0, 1
+8077900B	//0E: SHL R7, R7, R9
+
+88B00000	//0F: ADI RB, R0, 0
+80B53006	//10: AND RB, R5, R3		// Check the last bit of R3
+80BB0002	//11: SUB RB, RB, R0
+80BB5002	//12: SUB RB, RB, R5
+42000016	//13: BNE to ADI R6 if we don't have a carry from R3 to R4
+88A00001	//14: ADI RA, R0, 1
+80AA900B	//15: SHL RA, RA, R9
+
+88600001	//16: ADI R6, R0, 1
+8044600A	//17: SHR R4, R4, R6
+8033600A	//18: SHR R3, R3, R1
+80337005	//19: OR R3, R3, R7
+8044A005	//1A: OR R4, R4, RA
+88700000	//1B: ADI R7, R0, 0
+88A00000	//1C: ADI RA, R0, 0
+80885002	//1D: SUB R8, R8, R5
+00000000	//1E: NOP - wait for sreg to get set
+61000005	//1F: BNE to 05
+
+20300002	//20: STA R3, #0002
+20400003	//21: STA R4, #0003
+F0000000 	//22: HLT                                                   Halt program
+
+
+
+
+

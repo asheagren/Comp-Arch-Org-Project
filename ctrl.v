@@ -104,6 +104,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			ir_load <= 1'b0;
 			pc_rst <= 1'b0;
 			mux4_swap_sel <= 0;
+			dm_we <= 0;
 		end
 
 		fetch: begin
@@ -132,7 +133,6 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					pc_sel <= 1;
 
 					if((stat& mm) == 4'b0000) begin
-						$display("Took BNE branch");
 						pc_sel <= 1;
 						pc_write <= 1;
 						br_sel <= 1;
@@ -141,7 +141,6 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				BRA: begin
 					pc_sel <= 1;
 					if ((stat & mm) != 4'b0000) begin
-						$display("Took BRA branch");
 						pc_sel <= 1;
 						pc_write <= 1;
 						br_sel <= 1;
@@ -154,8 +153,6 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 
 					pc_sel <= 1;
 					if ((stat & mm) != 4'b0000) begin
-
-						$display("Took BRR branch");
 						pc_sel <= 1;
 						pc_write <= 1;
 						br_sel <= 0;
@@ -164,7 +161,6 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 				BNR: begin
 					pc_sel <= 1;
 					if ((stat & mm) == 4'b0000) begin
-						$display("Took BNR branch");
 						pc_sel <= 1;
 						pc_write <= 1;
 						br_sel <= 0;
