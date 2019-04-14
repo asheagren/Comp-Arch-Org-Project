@@ -5,19 +5,19 @@
 10700000 //02 02:   LDA R7, #0000     R7 <- M(0000)						R7 holds the count of numbers we will sort
 80778002 //03       SUB R7,R7,R8								Decrement R7
 00000000 //04 03:L1 NOP										L1
-80998000 //05 06:   ADD R6, R6, R8    R6 <- R6 + R8 						Increment Memory Pointer (R6)
+80608000 //05 06:   ADD R6, R6, R8    R6 <- R6 + R8 						Increment Memory Pointer (R6)
 88470000 //06 07:   ADI R4, R7, 0     R4 <- R7 + 0 						R4 is the iteration counter
 00000000 //07 08:L2 NOP										L2				
-18190000 //08 09:   LDX R1, R6, 0     R1 <- M(R6 + 0000)					Load R1 with M[1]		
-18290001 //09 11:   LDX R2, R6, 1     R2 <- M(R6 + 0001)					Load R2 with M[2]
+18160000 //08 09:   LDX R1, R6, 0     R1 <- M(R6 + 0000)					Load R1 with M[1]		
+18260001 //09 11:   LDX R2, R6, 1     R2 <- M(R6 + 0001)					Load R2 with M[2]
 80312002 //0A 12:   SUB R3, R1, R2    R3 <- R1 - R2						Compare R1 and R2
 4300000E //0B 13:   BRA               PC <- 0x0E If R3 <= 0, Branch to L3 (if R2>R1)		If R2>R1, don't swap
 00000000 //0C 14:   NOP
 30120000 //0D 15:   SWAP R1, R2       R2 <- R1, R1 <- R2 (if r3 negative, swap)			If R1<R2, swap
 00000000 //0E 16:L3 NOP
-28190000 //0F 18:   STX R6, R1, 0000  M(R6 + 0000) <- R1					Store R1 to M[1]
-28290001 //10 19:   STX R6, R2, 0001  M(R6 + 0001) <- R2					Store R2 to M[2]
-80998000 //11 20:   ADD R6, R6, R8    R6 <- R6 + R8						Increment Memory Pointer (R6)
+28160000 //0F 18:   STX R6, R1, 0000  M(R6 + 0000) <- R1					Store R1 to M[1]
+28260001 //10 19:   STX R6, R2, 0001  M(R6 + 0001) <- R2					Store R2 to M[2]
+80668000 //11 20:   ADD R6, R6, R8    R6 <- R6 + R8						Increment Memory Pointer (R6)
 80448002 //12 21:   SUB R4, R4, R8    R4 <- R4 - R8 						Increment the iteration counter
 61000007 //13 22:   BNE               PC <- 0x07 if R4 != 0 Branch to L2			If we haven't gone through all ints, keep going
 00000000 //14 23:   NOP								
