@@ -164,8 +164,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						br_sel <= 0;
 					end
 				end
-				STR: begin
+				STR: begin //STR general store opcode mm tells what kind of store 
+						// part 3 STX mm == 8 STA mm == 0 
+						// Part 4 STP: mm == 9 STR mm == 1
 					rb_sel <= 1;
+					
 				end
 				SWP: begin
 					rb_sel <= 1;
@@ -178,8 +181,84 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		execute: begin
 			pc_write <= 1'b0;
 			ir_load <= 1'b0;
-			
+			case(mm)
+				am_imm: begin //mm == 8
+					case(opcode)
+						ALU_OP: begin
 
+							alu_op <= 2'b01;
+							dm_we <= 0;
+						end
+						STR: begin
+							alu_op <= 2'b11;
+							dm_we <= 1;
+						end
+						LOD: begin //LOD general load opcode 
+							//Part 3: LDX mm == 8 LDA mm == 0
+							//Part 4: LDP mm == 9 LDR mm == 1
+						
+							alu_op <= 2'b11;
+							wb_sel = 1;
+							dm_we <= 0;
+						end
+						SWP: begin	
+							swap_ctrl <= 1;					
+							wb_sel <= 2;
+
+						end
+						default: begin
+							alu_op <= 2'b11;
+							dm_we <= 0;
+						
+						end
+					endcase
+
+				1: begin //mm == 1 for LDR & STR
+					case(opcode)
+						LOD:begin
+						end
+						STR:begin
+						end
+					endcase
+
+				9:begin //mm == 9 for LDP & STP
+					case(opcode)
+						LOD:begin
+						end
+						STR:begin
+						end
+					endcase
+
+				default:begin  //mm == 0 
+					case(opcode)
+						ALU_OP: begin
+							alu_op <= 2'b00;
+							dm_we <= 0;
+						end
+						STR: begin
+							alu_op <= 2'b10;
+							dm_we <= 1;						
+						end
+						SWP: begin
+							swap_ctrl <= 1;
+							wb_sel <= 2;
+						end
+						LOD: begin
+							alu_op <= 2'b10;
+							wb_sel = 1;
+							dm_we <= 0;						
+						end
+						default: begin
+							alu_op <= 2'b10;
+							dm_we <= 0;
+						end
+	
+					endcase
+				end
+
+			endcase
+		end
+/*
 			if(mm == am_imm) begin
 				
 				case(opcode)
@@ -192,7 +271,9 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						alu_op <= 2'b11;
 						dm_we <= 1;
 					end
-					LOD: begin
+					LOD: begin //LOD general load opcode 
+							//Part 3: LDX mm == 8 LDA mm == 0
+							//Part 4: LDP mm == 9 LDR mm == 1
 						
 						alu_op <= 2'b11;
 						wb_sel = 1;
@@ -210,7 +291,10 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					end
 				endcase
 			end
-			else begin
+*/
+
+/*
+			else begin // mm == 0
 				
 				case(opcode)
 					ALU_OP: begin
@@ -237,28 +321,54 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 	
 				endcase
 			end
+*/
 		end
 
 		mem: begin
 			swap_ctrl <= 0;
 			case (opcode)
 				LOD: begin
+					case(mm)
+						am_imm:begin //mm == 8
+							mux_16_sel <= 1;
+						end
+						1:begin // mm == 1
+						end
+						9:begin //mm == 9
+						end
+						default:begin //mm == 0
+							mux_16_sel <= 0;
+						end
+					endcase
+/*
 					if(mm == am_imm)begin
 						mux_16_sel <= 1;
 					end
 					else begin
 						mux_16_sel <= 0;
 					end
-	
+*/	
 					rf_we <= 1;
 				end
 				STR: begin
+					case(mm)
+						am_imm:begin //mm == 8
+						end
+						1:begin //mm == 1
+						end
+						9:begin //mm == 9
+						end
+						default:begin //mm == 0
+						end
+					endcase
+/*
 					if(mm == am_imm) begin
 						mux_16_sel <= 1;
 					end
 					else begin
 						mux_16_sel <= 0;
 					end
+*/
 					dm_we <= 1;
 				end
 				SWP: begin
