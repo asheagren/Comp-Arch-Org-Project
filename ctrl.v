@@ -99,15 +99,19 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 
 		start1: begin
 			dm_we <= 0;
-			//wb_sel <= 0;
+			wb_sel <= 0;
 			alu_op <= 2'b00;
 			ir_load <= 1'b0;
 			pc_rst <= 1'b0;
 			mux4_swap_sel <= 0;
 			dm_we <= 0;
+			br_sel <= 1'b0;
+			pc_rst <= 1'b0;
+			pc_sel <= 1'b0;	
 		end
 
 		fetch: begin
+			mux4_swap_sel <= 0;
 			swap_ctrl <= 0;
 			rf_we <= 1'b0;
 			wb_sel <= 0;
@@ -214,23 +218,31 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						
 						end
 					endcase
-
+				end
 				1: begin //mm == 1 for LDR & STR
 					case(opcode)
 						LOD:begin
+							alu_op <= 2'b10;
+							wb_sel <= 1;
+							dm_we <= 0;	
 						end
 						STR:begin
 						end
 					endcase
-
+				end
 				9:begin //mm == 9 for LDP & STP
 					case(opcode)
 						LOD:begin
+							alu_op <= 2'b01;
+							wb_sel <= 0;
+							dm_we <= 0;
 						end
 						STR:begin
+							alu_op <= 2'b01;
+							dm_we <= 1;
 						end
 					endcase
-
+				end
 				default:begin  //mm == 0 
 					case(opcode)
 						ALU_OP: begin
@@ -260,118 +272,47 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 
 			endcase
 		end
-/*
-			if(mm == am_imm) begin
-				
-				case(opcode)
-					ALU_OP: begin
-
-						alu_op <= 2'b01;
-						dm_we <= 0;
-					end
-					STR: begin
-						alu_op <= 2'b11;
-						dm_we <= 1;
-					end
-					LOD: begin //LOD general load opcode 
-							//Part 3: LDX mm == 8 LDA mm == 0
-							//Part 4: LDP mm == 9 LDR mm == 1
-						
-						alu_op <= 2'b11;
-						wb_sel = 1;
-						dm_we <= 0;
-					end
-					SWP: begin	
-						swap_ctrl <= 1;					
-						wb_sel <= 2;
-
-					end
-					default: begin
-						alu_op <= 2'b11;
-						dm_we <= 0;
-						
-					end
-				endcase
-			end
-*/
-
-/*
-			else begin // mm == 0
-				
-				case(opcode)
-					ALU_OP: begin
-						alu_op <= 2'b00;
-						dm_we <= 0;
-					end
-					STR: begin
-						alu_op <= 2'b10;
-						dm_we <= 1;						
-					end
-					SWP: begin
-						swap_ctrl <= 1;
-						wb_sel <= 2;
-					end
-					LOD: begin
-						alu_op <= 2'b10;
-						wb_sel = 1;
-						dm_we <= 0;						
-					end
-					default: begin
-						alu_op <= 2'b10;
-						dm_we <= 0;
-					end
-	
-				endcase
-			end
-*/
-		end
 
 		mem: begin
 			swap_ctrl <= 0;
 			case (opcode)
 				LOD: begin
-					case(mm)
-						am_imm:begin //mm == 8
-							mux_16_sel <= 1;
-						end
-						1:begin // mm == 1
-						end
-						9:begin //mm == 9
-						end
-						default:begin //mm == 0
-							mux_16_sel <= 0;
-						end
-					endcase
-/*
-					if(mm == am_imm)begin
+
+					if(mm == am_imm || mm == 1)begin
 						mux_16_sel <= 1;
 					end
+
+					else if(mm == 9)begin
+						mux_16_sel <= 1;
+						mux4_swap_sel = 1;
+						rf_we <= 1;
+						//RS gets writen to
+					end
+
 					else begin
 						mux_16_sel <= 0;
 					end
-*/	
+
 					rf_we <= 1;
 				end
 				STR: begin
-					case(mm)
-						am_imm:begin //mm == 8
-						end
-						1:begin //mm == 1
-						end
-						9:begin //mm == 9
-						end
-						default:begin //mm == 0
-						end
-					endcase
-/*
+
 					if(mm == am_imm) begin
 						mux_16_sel <= 1;
+						dm_we <= 1;
+					end		
+					else if(mm == 9)begin
+						wb_sel <= 0;
+						//mux_16_sel <= 1;
+						mux4_swap_sel = 1;
+						rf_we <= 1;
 					end
 					else begin
 						mux_16_sel <= 0;
+						dm_we <= 1;
 					end
-*/
-					dm_we <= 1;
+
+					//dm_we <= 1;
 				end
 				SWP: begin
 					rf_we = 1;
@@ -381,7 +322,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 			endcase
 		end
 
-		writeback: begin //I cant believe you messed this up
+		writeback: begin
 			rf_we = 0;
 			dm_we <= 0;
 			case(opcode) 
@@ -389,12 +330,27 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					rf_we = 1;
 				end
 				LOD: begin
+					
+					if(mm == 9)begin
+						wb_sel = 1;
+						mux4_swap_sel = 0;
+					end
 					rf_we = 1;
 				end
 				SWP: begin
 					wb_sel = 3;
 					mux4_swap_sel = 1;
 					rf_we = 1;
+				end
+				STR: begin
+					if(mm == 9)begin
+						mux_16_sel = 1;
+						mux4_swap_sel = 0;
+						dm_we = 1;
+						//wb_sel = 0;
+						//mux4_swap_sel = 1;
+					end
+					//rf_we = 1;
 				end
 			endcase 
 
