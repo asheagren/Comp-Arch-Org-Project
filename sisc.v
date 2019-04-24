@@ -83,7 +83,7 @@ br br1(pc_out[15:0], instruction[15:0], br_sel, br_out[15:0]);
 
 dm dm1(mux_16_out, mux_16_out, rsb, dm_we, read_data);
 
-mux16 mux161(.rs_new(rs_new),.rs_in(rsa[15:0]).in_a(instruction[15:0]), .in_b(alu_result[15:0]), .sel(mux_16_sel), .out(mux_16_out));
+mux16 mux161(.rs_new(rs_new),.rs_in(rsa[15:0]),.in_a(instruction[15:0]), .in_b(alu_result[15:0]), .sel(mux_16_sel), .out(mux_16_out));
 
 
 

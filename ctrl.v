@@ -221,7 +221,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						end
 					endcase
 				end
-				1: begin //mm == 1 for LDR & STR
+				1: begin //mm == 1 for LDR done & STR working on it
 					case(opcode)
 						LOD:begin
 							alu_op <= 2'b01;
@@ -287,9 +287,10 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						mux_16_sel <= 1;
 					end
 					else if(mm == 1)begin
-						mux_16_sel <= 2;
-						mux4_swap_sel = 1;
-						rf_we <= 1;
+						wb_sel = 1;
+						mux_16_sel = 2;
+						mux4_swap_sel = 0;
+						rf_we = 1;
 					end
 					else if(mm == 9)begin
 						mux_16_sel <= 1;
@@ -300,6 +301,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 
 					else begin
 						mux_16_sel <= 0;
+						
 					end
 
 					rf_we <= 1;
@@ -311,9 +313,11 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						dm_we <= 1;
 					end
 					else if(mm == 1)begin
-						wb_sel <= 0;
+						mux_16_sel = 2;
+						//wb_sel = 0;
 						mux4_swap_sel = 1;
-						rf_we <= 1;
+						//dm_we = 1;
+						rf_we = 1;
 						
 					end		
 					else if(mm == 9)begin
@@ -350,8 +354,8 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						mux4_swap_sel = 0;
 					end
 					else if(mm == 1)begin
-						wb_sel = 1;
-						mux4_swap_sel = 0;
+						wb_sel = 0;
+						mux4_swap_sel = 1;
 
 					end
 					rf_we = 1;
@@ -369,8 +373,10 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 
 					end
 					else if(mm == 1)begin
+						//wb_sel = 0;
 						mux_16_sel = 2;
 						mux4_swap_sel = 0;
+						//rf_we = 1;
 						dm_we = 1;
 					end
 					//rf_we = 1;
