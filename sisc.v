@@ -42,7 +42,7 @@ wire[15:0] br_out;
 wire[15:0] mux_16_out;
 wire dm_we;
 wire[31:0] read_data;
-wire mux_16_sel;
+wire[1:0] mux_16_sel;
 wire mux_16_in_a;
 wire mux_16_in_b;
 wire[31:0] swap_a;
@@ -50,6 +50,7 @@ wire[31:0] swap_b;
 wire swap_sel;
 wire[3:0] mux4_swap_out;
 wire swap_ctrl;
+wire rs_new;
 // component instantiation goes here
 
 //in_a, in_b, sel--could be rb_sel, out
@@ -70,7 +71,7 @@ mux32 mux321(swap_ctrl, alu_result, read_data, rsa, rsb, wb_sel, write_data);
 statreg statreg1(.clk(clk), .in(cc), .stat_en(stat_en), .out(stat_out));
 
 //clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel, rd_sel
-ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, swap_sel, swap_ctrl); 
+ctrl ctrl1(clk, rst_f, instruction[31:28], instruction[27:24], stat_out, rf_we, alu_op, wb_sel,rb_sel, pc_sel, pc_write, pc_rst, ir_load, br_sel, mux_16_sel, dm_we, swap_sel, swap_ctrl,rs_new); 
 
 pc pc1(clk, br_out[15:0], pc_sel, pc_write, pc_rst, pc_out[15:0]);
 
@@ -82,7 +83,7 @@ br br1(pc_out[15:0], instruction[15:0], br_sel, br_out[15:0]);
 
 dm dm1(mux_16_out, mux_16_out, rsb, dm_we, read_data);
 
-mux16 mux161(.in_a(instruction[15:0]), .in_b(alu_result[15:0]), .sel(mux_16_sel), .out(mux_16_out));
+mux16 mux161(.rs_new(rs_new),.rs_in(rsa[15:0]).in_a(instruction[15:0]), .in_b(alu_result[15:0]), .sel(mux_16_sel), .out(mux_16_out));
 
 
 
