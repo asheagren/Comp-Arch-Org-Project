@@ -324,7 +324,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 					else if(mm == 1)begin
 						mux_16_sel = 2;
 						dm_we <= 1;
-						rf_we <= 1;
+						//rf_we <= 1;
 						//mux4_swap_sel = 2;
 						//rf_we = 1;
 						//mux_16_sel <= 1;
