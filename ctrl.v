@@ -175,6 +175,9 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						// part 3 STX mm == 8 STA mm == 0 
 						// Part 4 STP: mm == 9 STR mm == 1
 					rb_sel <= 1;
+					if (mm == 1) begin						
+						mux_16_sel = 2;
+					end
 					
 				end
 				SWP: begin
@@ -226,13 +229,14 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						LOD:begin
 							alu_op <= 2'b01;
 							wb_sel <= 1;
-							dm_we <= 0;	
+							dm_we <= 1;	
 						end
 						STR:begin
 							/*alu_op <= 2'b01;
 							dm_we <= 1;*/
-							alu_op <= 2'b11;
+							alu_op <= 2'b01;
 							dm_we <= 1;
+							//mux_16_sel <= 2;
 						end
 					endcase
 				end
@@ -280,6 +284,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		mem: begin
+			$display("Memory");
 			swap_ctrl <= 0;
 			rs_new <= 0;
 			case (opcode)
@@ -315,11 +320,14 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						dm_we <= 1;
 					end
 					else if(mm == 1)begin
-						/*mux_16_sel = 2;
-						mux4_swap_sel = 1;
-						rf_we = 1;*/
-						mux_16_sel <= 1;
+						mux_16_sel = 2;
 						dm_we <= 1;
+						rf_we <= 1;
+						//mux4_swap_sel = 2;
+						//rf_we = 1;
+						//mux_16_sel <= 1;
+						//dm_we <= 1;
+						//mux_16_sel <= 2;
 					end		
 					else if(mm == 9)begin
 						wb_sel <= 0;
@@ -342,6 +350,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		writeback: begin
+			$display("Writeback");
 			rf_we = 0;
 			dm_we <= 0;
 			case(opcode) 
@@ -377,6 +386,12 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						/*mux_16_sel = 2;
 						mux4_swap_sel = 0;
 						dm_we = 1;*/
+						//dm_we = 1;
+						mux4_swap_sel = 1;
+						dm_we <= 0;
+						rf_we = 1;
+						//mux_32_sel = 0;
+						//mux_16_sel = 2;
 					end
 					//rf_we = 1;
 				end
