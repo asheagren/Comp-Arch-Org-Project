@@ -126,6 +126,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		decode: begin
+			$display("Decode");
 			ir_load <= 1'b0;
 			pc_write <= 1'b0;
 
@@ -189,6 +190,7 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 		end
 
 		execute: begin
+			$display("Execute");
 			pc_write <= 1'b0;
 			ir_load <= 1'b0;
 			rs_new <= 1;
@@ -229,13 +231,13 @@ module ctrl (clk, rst_f, opcode, mm, stat, rf_we, alu_op, wb_sel,rb_sel, pc_sel,
 						LOD:begin
 							alu_op <= 2'b01;
 							wb_sel <= 1;
-							dm_we <= 1;	
+							//dm_we <= 1;	
 						end
 						STR:begin
 							/*alu_op <= 2'b01;
 							dm_we <= 1;*/
 							alu_op <= 2'b01;
-							dm_we <= 1;
+							//dm_we <= 1;
 							//mux_16_sel <= 2;
 						end
 					endcase
