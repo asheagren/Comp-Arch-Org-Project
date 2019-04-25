@@ -31,7 +31,6 @@ module mux16 (rs_new, rs_in, in_a, in_b, sel, out);
 
   always @(posedge rs_new)begin
 	rs_hold <= rs_in;
-	$display(rs_in);
   end
    
   always @ (in_a, in_b, sel)

@@ -71,7 +71,7 @@ module rf (clk, read_rega, read_regb, write_reg, write_data, rf_we, rsa, rsb);
   // write process is sensitive to write enable
   always @(posedge clk)
   begin
-    if (rf_we == 1'b1)
+    if (rf_we == 1'b1) 
       ram_array[write_reg] <= write_data;
   end
   
